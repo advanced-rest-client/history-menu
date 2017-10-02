@@ -1,3 +1,13 @@
+<a name="0.1.3"></a>
+## [0.1.3](https://github.com/advanced-rest-client/history-menu/compare/0.1.2...0.1.3) (2017-10-02)
+
+
+### Update
+
+* Adding hidden object css ([041c1c3c7b3001dd74a64ba8d22247c82737df90](https://github.com/advanced-rest-client/history-menu/commit/041c1c3c7b3001dd74a64ba8d22247c82737df90))
+
+
+
 <a name="0.1.2"></a>
 ## 0.1.2 (2017-10-02)
 
