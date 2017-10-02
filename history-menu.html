@@ -409,7 +409,7 @@ Custom property | Description | Default
       if (typeof datastore === 'string') {
         datastore = [datastore];
       }
-      if (datastore.indexOf('history-requests') === -1) {
+      if (datastore.indexOf('history-requests') === -1 && datastore[0] !== 'all') {
         return;
       }
 
