@@ -40,4 +40,6 @@ Custom property | Description | Default
 `--history-menu-group-header-font-weigth` | Group header border color |  `bold`
 `--history-menu-group-header-border-color` | Group header border color | `#ddd`
 `--history-menu-group-header-color` | Font color of the group header` | `rgba(0, 0, 0, 0.54)`
+`--saved-menu-empty-info-color` | Color applied to the empty info section | ``
+`--saved-menu-empty-info-title-color` | Color applied to the title in the empty info section | ``
 
