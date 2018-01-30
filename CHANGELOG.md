@@ -1,3 +1,9 @@
+<a name="0.1.8"></a>
+## [0.1.8](https://github.com/advanced-rest-client/history-menu/compare/0.1.7...0.1.8) (2018-01-30)
+
+
+
+
 <a name="0.1.7"></a>
 ## [0.1.7](https://github.com/advanced-rest-client/history-menu/compare/0.1.6...0.1.7) (2018-01-30)
 
