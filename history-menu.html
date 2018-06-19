@@ -1,6 +1,6 @@
 <!--
 @license
-Copyright 2016 The Advanced REST client authors <arc@mulesoft.com>
+Copyright 2018 The Advanced REST client authors <arc@mulesoft.com>
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
 the License at
@@ -11,66 +11,17 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-ripple/paper-ripple.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
 <link rel="import" href="../iron-list/iron-list.html">
-<link rel="import" href="../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
-<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../http-method-label/http-method-label.html">
-<link rel="import" href="../openable-panel-behavior/openable-panel-behavior.html">
-<link rel="import" href="../app-pouchdb/pouchdb.html">
-<!--
-A list of history items in the ARC main menu.
 
-The element uses direct implementation of the PouchDB to make a query to the
-datastore. It also listens to events fired by the `arc-model` elements to
-update state of the history items.
-
-### Example
-```
-<history-menu></history-menu>
-```
-
-### Sizing the element
-
-The element uses `<iron-list>` to render the data in the view. The list is set
-to be flex vertically. It means that the element has to be sized directly by the
-hosting application or otherwise it size will be 0px.
-
-It can be done using flex layout and making the element to be `flex: 1`.
-
-### Styling
-`<history-menu>` provides the following custom properties and mixins for styling:
-
-Custom property | Description | Default
-----------------|-------------|----------
-`--history-menu` | Mixin applied to the element | `{}`
-`--history-menu-background-color` | Background color of the menu | `#f7f7f7`
-`--history-menu-selected-post-method-color` | Font color of selected item POST method label | `#fff`
-`--history-menu-focused-post-method-color` | Font color of focused item POST method label | `rgb(33, 150, 243)`
-`--history-menu-selected-method-label-background-color` | Background color of the POST method label when the item is focused | `#fff`
-`--history-menu-list` | Mixin applied to the list element. | `{}`
-`--history-menu-list-item` | Mixin applied to each list item | `{}`
-`--history-menu-selected-item-background-color` | Background color of the selected list item | `#FF9800`
-`--history-menu-selected-item-color` | Color of the selected list item | `#fff`
-`--history-menu-url-label` | Mixin applied to the URL label | `{}`
-`--history-menu-group-header` | Mixin applied to the history list group header | `{}`
-`--history-menu-group-header-font-weigth` | Group header border color |  `bold`
-`--history-menu-group-header-border-color` | Group header border color | `#ddd`
-`--history-menu-group-header-color` | Font color of the group header` | `rgba(0, 0, 0, 0.54)`
-`--arc-menu-empty-info-color` | Color applied to the empty info section | ``
-`--arc-menu-empty-info-title-color` | Color applied to the title in the empty info section | ``
-
-@group UI Elements
-@element history-menu
-@demo demo/index.html
--->
 <dom-module id="history-menu">
   <template>
     <style>
-     :host {
+    :host {
       display: block;
       background-color: var(--history-menu-background-color, #f7f7f7);
       position: relative;
@@ -169,25 +120,6 @@ Custom property | Description | Default
     <template is="dom-if" if="[[dataUnavailable]]">
       <div class="empty-message">
         <h3 class="empty-title">Send a request and recall it from here</h3>
-        <svg class="empty-state-image" viewBox="0 0 180 120">
-          <defs><style>
-          .c1 {fill: #4d4d4d;}
-          .c2 {fill: #666;}
-          .c3 {fill: #faa;}
-          .c4 {fill: red;}
-          </style></defs>
-          <g><rect class="c1" width="180" height="120" /></g>
-          <rect class="c2" x="49" width="131" height="120" />
-          <rect class="c2" x="4" y="5" width="41" height="7" />
-          <rect class="c2" x="4" y="107.97" width="41" height="7" />
-          <rect class="c2" x="4" y="22" width="35.53" height="7" />
-          <rect class="c3" x="4" y="47.33" width="41" height="7" />
-          <rect class="c4" x="4" y="47.33" width="9" height="7" />
-          <rect class="c3" x="4" y="62.67" width="41" height="7" />
-          <rect class="c4" x="4" y="62.67" width="9" height="7" />
-          <rect class="c3" x="4" y="78" width="41" height="7" />
-          <rect class="c4" x="4" y="78" width="9" height="7" />
-        </svg>
         <p class="empty-info">Once you made a request it will appear in this place.</p>
       </div>
     </template>
@@ -207,106 +139,169 @@ Custom property | Description | Default
     </iron-list>
   </template>
   <script>
-  Polymer({
-    is: 'history-menu',
+  /**
+   * A list of history items in the ARC main menu.
+   *
+   * The element uses direct implementation of the PouchDB to make a query to the
+   * datastore. It also listens to events fired by the `arc-model` elements to
+   * update state of the history items.
+   *
+   * ### Example
+   * ```
+   * <history-menu></history-menu>
+   * ```
+   *
+   * ### Sizing the element
+   *
+   * The element uses `<iron-list>` to render the data in the view. The list is set
+   * to be flex vertically. It means that the element has to be sized directly by the
+   * hosting application or otherwise it size will be 0px.
+   *
+   * It can be done using flex layout and making the element to be `flex: 1`.
+   *
+   * ## Changes in version 2
+   *
+   * - PouchDB is no longer included into the element. Each platform can have
+   * different implementation of the library so this element will not make
+   * assumtions about the platform.
+   * - The element does not support "opened" attribute. Once inserted into the
+   * DOM it queries datastore.
+   *
+   * ### Styling
+   * `<history-menu>` provides the following custom properties and mixins for styling:
+   *
+   * Custom property | Description | Default
+   * ----------------|-------------|----------
+   * `--history-menu` | Mixin applied to the element | `{}`
+   * `--history-menu-background-color` | Background color of the menu | `#f7f7f7`
+   * `--history-menu-selected-post-method-color` | Font color of selected item POST
+   * method label | `#fff`
+   * `--history-menu-focused-post-method-color` | Font color of focused item
+   * POST method label | `rgb(33, 150, 243)`
+   * `--history-menu-selected-method-label-background-color` | Background color
+   * of the POST method label when the item is focused | `#fff`
+   * `--history-menu-list` | Mixin applied to the list element. | `{}`
+   * `--history-menu-list-item` | Mixin applied to each list item | `{}`
+   * `--history-menu-selected-item-background-color` | Background color of the
+   * selected list item | `#FF9800`
+   * `--history-menu-selected-item-color` | Color of the selected list item | `#fff`
+   * `--history-menu-url-label` | Mixin applied to the URL label | `{}`
+   * `--history-menu-group-header` | Mixin applied to the history list group
+   * header | `{}`
+   * `--history-menu-group-header-font-weigth` | Group header border color |
+   * `bold`
+   * `--history-menu-group-header-border-color` | Group header border color |
+   * `#ddd`
+   * `--history-menu-group-header-color` | Font color of the group header` |
+   * `rgba(0, 0, 0, 0.54)`
+   * `--arc-menu-empty-info-color` | Color applied to the empty info section | ``
+   * `--arc-menu-empty-info-title-color` | Color applied to the title in the
+   * empty info section | ``
+   *
+   * @polymer
+   * @customElement
+   * @memberof UiElements
+   * @demo demo/index.html
+   */
+  class HistoryMenu extends Polymer.Element {
+    static get is() {return 'history-menu';}
+    static get properties() {
+      return {
+        /**
+         * History items found in the datastore.
+         */
+        items: Array,
+        // Database ID of the selected item.
+        selectedItem: String,
+        // True when the element is querying the database for the data.
+        querying: {
+          type: Boolean,
+          readOnly: true,
+          notify: true
+        },
+        // Computed value, true if the `items` property has values.
+        hasItems: {
+          type: Boolean,
+          value: false,
+          computed: '_computeHasItems(items.length)',
+          notify: true
+        },
+        /**
+         * Database query options for pagination.
+         * Override this value to change the query options like limit of the results in one call.
+         *
+         * This is query options passed to the PouchDB `allDocs` function. Note that it will not
+         * set `include_docs` option. A conviniet shortcut is to set the the `includeDocs` property
+         * and the directive will be added automatically.
+         */
+        queryOptions: {
+          type: Object,
+          readOnly: true,
+          value() {
+            return {
+              limit: 25,
+              descending: true,
+              // jscs:disable
+              include_docs: true
+              // jscs:enable
+            };
+          }
+        },
+        /**
+         * Computed value. True if query ended and there's no results.
+         */
+        dataUnavailable: {
+          type: Boolean,
+          computed: '_computeDataUnavailable(hasItems, querying)'
+        }
+      };
+    }
 
-    behaviors: [
-      Polymer.IronScrollTargetBehavior,
-      Polymer.IronResizableBehavior,
-      ArcBehaviors.OpenablePanelBehavior
-    ],
-
-    properties: {
-      /**
-       * History items found in the datastore.
-       */
-      items: Array,
-      // Database ID of the selected item.
-      selectedItem: String,
-      // True when the element is querying the database for the data.
-      querying: {
-        type: Boolean,
-        readOnly: true,
-        notify: true
-      },
-      // Computed value, true if the `items` property has values.
-      hasItems: {
-        type: Boolean,
-        value: false,
-        computed: '_computeHasItems(items.length)',
-        notify: true
-      },
-      /**
-       * Database query options for pagination.
-       * Override this value to change the query options like limit of the results in one call.
-       *
-       * This is query options passed to the PouchDB `allDocs` function. Note that it will not
-       * set `include_docs` option. A conviniet shortcut is to set the the `includeDocs` property
-       * and the directive will be added automatically.
-       */
-      queryOptions: {
-        type: Object,
-        readOnly: true,
-        value: function() {
-          return {
-            limit: 25,
-            descending: true,
-            // jscs:disable
-            include_docs: true
-            // jscs:enable
-          };
-        }
-      },
-      // Element's scroll target
-      scrollTarget: {
-        type: Object,
-        value: function() {
-          return this.$.list;
-        }
-      },
-      /**
-       * Computed value. True if query ended and there's no results.
-       */
-      dataUnavailable: {
-        type: Boolean,
-        computed: '_computeDataUnavailable(hasItems, querying)'
-      },
-      // Event target for the model.
-      _eventTarget: {
-        type: Object,
-        value: function() {
-          return this;
-        }
-      }
-    },
     // Returns a handler to the datastore instance
     get _db() {
+      /* global PouchDB */
+      if (typeof PouchDB === 'undefined') {
+        console.error('PouchDB is not included into the application.');
+      }
       return new PouchDB('history-requests');
-    },
+    }
 
-    observers: [
-      '_resetOnClosed(_isOpened)',
-    ],
+    constructor() {
+      super();
+      this._historyChanged = this._historyChanged.bind(this);
+      this._requestChanged = this._requestChanged.bind(this);
+      this._requestDeleted = this._requestDeleted.bind(this);
+      this.refresh = this.refresh.bind(this);
+      this._onDatabaseDestroy = this._onDatabaseDestroy.bind(this);
+      this._scrollHandler = this._scrollHandler.bind(this);
+    }
 
-    attached: function() {
-      this.listen(window, 'history-object-changed', '_historyChanged');
-      this.listen(window, 'request-object-changed', '_requestChanged');
-      this.listen(window, 'request-object-deleted', '_requestDeleted');
-      this.listen(window, 'data-imported', 'refresh');
-      this.listen(window, 'datastore-destroyed', '_onDatabaseDestroy');
-    },
+    connectedCallback() {
+      super.connectedCallback();
+      window.addEventListener('history-object-changed', this._historyChanged);
+      window.addEventListener('request-object-changed', this._requestChanged);
+      window.addEventListener('request-object-deleted', this._requestDeleted);
+      window.addEventListener('data-imported', this.refresh);
+      window.addEventListener('datastore-destroyed', this._onDatabaseDestroy);
+      this.$.list.addEventListener('scroll', this._scrollHandler);
+      if (!this.querying && !this.items) {
+        this.makeQuery();
+      }
+    }
 
-    detached: function() {
-      this.unlisten(window, 'history-object-changed', '_historyChanged');
-      this.unlisten(window, 'request-object-changed', '_requestChanged');
-      this.unlisten(window, 'request-object-deleted', '_requestDeleted');
-      this.unlisten(window, 'data-imported', 'refresh');
-      this.unlisten(window, 'datastore-destroyed', '_onDatabaseDestroy');
-    },
+    disconnectedCallback() {
+      window.removeEventListener('history-object-changed', this._historyChanged);
+      window.removeEventListener('request-object-changed', this._requestChanged);
+      window.removeEventListener('request-object-deleted', this._requestDeleted);
+      window.removeEventListener('data-imported', this.refresh);
+      window.removeEventListener('datastore-destroyed', this._onDatabaseDestroy);
+      this.$.list.removeEventListener('scroll', this._scrollHandler);
+      super.disconnectedCallback();
+    }
     /**
      * Resets the state of the variables.
      */
-    reset: function() {
+    reset() {
       if (this.queryOptions) {
         delete this.queryOptions.startkey;
         delete this.queryOptions.skip;
@@ -314,30 +309,24 @@ Custom property | Description | Default
       this._setQuerying(false);
       this.set('items', []);
       this.set('selectedItemIndex', -1);
-    },
+    }
     /**
      * Refreshes the data from the datastore.
      * It resets the query options, clears items and makes a query to the datastore.
      */
-    refresh: function() {
+    refresh() {
       this.reset();
       this.makeQuery();
-    },
-
-    _resetOnClosed: function(_isOpened) {
-      if (_isOpened && !this.items && !this.querying) {
-        this.makeQuery();
-      }
-    },
+    }
     // Handler for the `request-object-changed` event. This supports old API
     // and soon it should be replaced with `request-object-changed` event.
-    _historyChanged: function(e) {
-      var id = e.detail.id;
-      var doc = e.detail.item;
+    _historyChanged(e) {
+      const id = e.detail.id;
+      const doc = e.detail.item;
       this._processItemChanged(id, doc);
-    },
+    }
     // Handler for the `request-object-changed`
-    _requestChanged: function(e) {
+    _requestChanged(e) {
       if (e.cancelable) {
         return;
       }
@@ -345,7 +334,7 @@ Custom property | Description | Default
         return;
       }
       this._processItemChanged(e.detail.request._id, e.detail.request);
-    },
+    }
     /**
      * Processes updated request / history item.
      * If the request object is already on the list it will update the object.
@@ -354,63 +343,73 @@ Custom property | Description | Default
      * @param {String} id Database ID of updated object
      * @param {Object} doc Database object.
      */
-    _processItemChanged: function(id, doc) {
-      var items = this.items;
+    _processItemChanged(id, doc) {
+      const items = this.items;
       if (!items) {
         return this._pushHistoryItem(doc);
       }
-      for (var i = 0, len = items.length; i < len; i++) {
+      for (let i = 0, len = items.length; i < len; i++) {
         if (items[i]._id === id) {
-          return this.set(['items', i], doc);
+          if (i === 0) {
+            this._appendTodaysHeader(doc);
+          }
+          this.set(['items', i], doc);
+          return;
         }
       }
       this._pushHistoryItem(doc);
-    },
+    }
     /**
-     * Adds a new history item to the top of the list.
+     * Appends "today" header to the item.
+     *
+     * @param {Object} item History document
      */
-    _pushHistoryItem: function(item) {
+    _appendTodaysHeader(item) {
       item.hasHeader = true;
       item.header = 'Today';
       item.today = true;
-
-      var firstItem = this.get(['items', 0]);
+    }
+    /**
+     * Adds a new history item to the top of the list.
+     */
+    _pushHistoryItem(item) {
+      this._appendTodaysHeader(item);
+      const firstItem = this.get(['items', 0]);
       if (firstItem === undefined) {
         return this.set('items', [item]);
       }
-
       if (firstItem && firstItem.today) {
         delete firstItem.hasHeader;
         delete firstItem.header;
         this.set(['items', 0], firstItem);
       }
-      var items = [item].concat(this.items);
-      this.set('items', items);
-    },
+      this.unshift('items', item);
+    }
 
     // Hanlder for the `request-object-deleted` event. Removed item from list if found.
-    _requestDeleted: function(e) {
+    _requestDeleted(e) {
       if (e.cancelable) {
         return;
       }
       if (e.detail.type !== 'history-requests') {
         return;
       }
-      var id = e.detail.id;
-      var items = this.items;
+      const id = e.detail.id;
+      const items = this.items;
       if (!items || !items.length) {
         return;
       }
-      for (var i = 0, len = items.length; i < len; i++) {
+      for (let i = 0, len = items.length; i < len; i++) {
         if (items[i]._id === id) {
-          return this.splice('items', i, 1);
+          this.splice('items', i, 1);
+          return;
         }
       }
-    },
+    }
 
     // Handler for the `datastore-destroyed` custom event
-    _onDatabaseDestroy: function(e) {
-      var datastore = e.detail.datastore;
+    _onDatabaseDestroy(e) {
+      let datastore = e.detail.datastore;
       if (!datastore || !datastore.length) {
         return;
       }
@@ -420,55 +419,58 @@ Custom property | Description | Default
       if (datastore.indexOf('history-requests') === -1 && datastore[0] !== 'all') {
         return;
       }
-
       this._db.close()
-      .then(() => {
-        this.refresh();
-      });
-    },
+      .then(() => this.refresh());
+    }
     /**
      * Computes class name for the HTML element representing a history item.
      */
-    _computeItemClass: function(_id, selectedItem) {
+    _computeItemClass(_id, selectedItem) {
       if (_id && _id === selectedItem) {
         return 'iron-selected';
       }
-    },
+    }
     // Computes value for the `hasItems` property.
-    _computeHasItems: function(length) {
+    _computeHasItems(length) {
       return !!(length);
-    },
-
+    }
     /**
      * Called every time the element changed it's scroll position. It will call the `makeQuery`
      * function when there's less than 120px left to scroll. (also it must be opened and must not
      * already querying).
      */
-    _scrollHandler: function() {
-      if (this.querying || !this._isOpened) {
+    _scrollHandler() {
+      if (this.querying) {
         return;
       }
-      var elm = this.scrollTarget;
-      var delta = elm.scrollHeight - (elm.scrollTop + elm.offsetHeight);
+      const elm = this.$.list;
+      const delta = elm.scrollHeight - (elm.scrollTop + elm.offsetHeight);
       if (delta < 120) {
         this.makeQuery();
       }
-    },
+    }
     /**
      * The function to call when new query for data is needed.
      */
-    makeQuery: function() {
-      this.debounce('menu-load-history-page', this._loadPage, 20);
-    },
+    makeQuery() {
+      if (this.__makingQuery) {
+        return;
+      }
+      this.__makingQuery = true;
+      setTimeout(() => {
+        this.__makingQuery = false;
+        this._loadPage();
+      }, 20);
+    }
     /**
      * Performs the query and processes the result.
      */
-    _loadPage: function() {
-      var db = this._db;
+    _loadPage() {
+      const db = this._db;
       this._setQuerying(true);
 
       db.allDocs(this.queryOptions)
-      .then(response => {
+      .then((response) => {
         this._setQuerying(false);
         if (response && response.rows.length > 0) {
           // Set up pagination.
@@ -479,36 +481,33 @@ Custom property | Description | Default
           if (!this.items) {
             this.set('items', res);
           } else {
-            res.forEach(item => {
+            res.forEach((item) => {
               this.push('items', item);
             });
           }
+          this.$.list.notifyResize();
         }
       })
       .catch((e) => {
         this._setQuerying(false);
-        this.fire('app-log', {
-          message: ['Query menu items', e],
-          level: 'error'
-        });
         console.error('Query menu items', e);
       });
-    },
+    }
     /**
      * Processes query results to generate view data model.
      * @param {Array} res List of history items retreived from the datastore.
      * @return {Array} Processed data items.
      */
-    _processResults: function(res) {
+    _processResults(res) {
       // updates required timestamps
       res = this._ensureTimestamps(res);
       // sorts by updated time
       res.sort(this._sortResults);
-      var today = this._getTodayTimestamp();
-      var yesterday = this._getYesterdayTimestamp(today);
+      const today = this._getTodayTimestamp();
+      const yesterday = this._getYesterdayTimestamp(today);
       res = this._groupHistory(res, today, yesterday);
       return res;
-    },
+    }
     /**
      * Ensures that the history objects have the `updated` property
      * required by further computations while processing results.
@@ -517,8 +516,8 @@ Custom property | Description | Default
      * @return {Array} The same array but all items will have `updated`
      * property.
      */
-    _ensureTimestamps: function(items) {
-      return items.map(item => {
+    _ensureTimestamps(items) {
+      return items.map((item) => {
         if (!item.updated || item.updated !== item.updated) {
           if (item.created && item.created === item.created) {
             item.updated = item.created;
@@ -528,9 +527,9 @@ Custom property | Description | Default
         }
         return item;
       });
-    },
+    }
     // Sorts the query results by `updated` property.
-    _sortResults: function(a, b) {
+    _sortResults(a, b) {
       if (a.updated > b.updated) {
         return -1;
       }
@@ -538,27 +537,24 @@ Custom property | Description | Default
         return 1;
       }
       return 0;
-    },
+    }
 
     // Creates a timestamp fot today, midnight
-    _getTodayTimestamp: function() {
-      var now = new Date();
-      now.setMilliseconds(0);
-      now.setSeconds(0);
-      now.setMinutes(0);
-      now.setHours(0);
+    _getTodayTimestamp() {
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
       return now.getTime();
-    },
+    }
     // Computes yesterday's midninght based on today's mignight timestamp
-    _getYesterdayTimestamp: function(todayTimestamp) {
+    _getYesterdayTimestamp(todayTimestamp) {
       return todayTimestamp - 86400000; // 24 h milliseconds
-    },
+    }
     /**
      * Creates a headers for each day and group requests in each day group.
      */
-    _groupHistory: function(items, today, yesterday) {
-      var days = [];
-      items = items.map(item => {
+    _groupHistory(items, today, yesterday) {
+      const days = [];
+      items = items.map((item) => {
         let info = this._computeHistoryTime(item._id.split('/')[0]);
         if (!info) {
           return;
@@ -580,15 +576,14 @@ Custom property | Description | Default
       });
       items = items.filter(item => !!item);
       return items;
-    },
+    }
 
-    _computeHistoryTime: function(date) {
-      var d = new Date(Number(date));
-      var _t = d.getTime();
-      if (_t !== _t) {
+    _computeHistoryTime(date) {
+      const d = new Date(Number(date));
+      if (isNaN(d)) {
         return '';
       }
-      var options = {
+      const options = {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -596,23 +591,28 @@ Custom property | Description | Default
       };
       return {
         formatted: new Intl.DateTimeFormat(undefined, options).format(d),
-        time: _t
+        time: d.getTime()
       };
-    },
+    }
 
     // Computes value for the `dataUnavailable` property.
-    _computeDataUnavailable: function(hasItems, querying) {
+    _computeDataUnavailable(hasItems, querying) {
       return !hasItems && !querying;
-    },
-    // Handler for the `tap` event on the item.
-    _openHistory: function(e) {
-      var id = e.model.get('item._id');
-      this.fire('navigate', {
-        base: 'request',
-        type: 'history',
-        id: id
-      });
     }
-  });
+    // Handler for the `tap` event on the item.
+    _openHistory(e) {
+      const id = e.model.get('item._id');
+      this.dispatchEvent(new CustomEvent('navigate', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          base: 'request',
+          type: 'history',
+          id: id
+        }
+      }));
+    }
+  }
+  window.customElements.define(HistoryMenu.is, HistoryMenu);
   </script>
 </dom-module>
