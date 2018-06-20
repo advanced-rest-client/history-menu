@@ -12,7 +12,8 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-item/paper-icon-item.html">
+<link rel="import" href="../paper-item/paper-item-body.html">
 <link rel="import" href="../paper-ripple/paper-ripple.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
 <link rel="import" href="../iron-list/iron-list.html">
@@ -25,17 +26,12 @@ the License.
       display: block;
       background-color: var(--history-menu-background-color, #f7f7f7);
       position: relative;
+
+      --paper-item-icon-width: 72px;
+
       @apply --layout-flex;
       @apply --layout-vertical;
       @apply --history-menu;
-    }
-
-    paper-item:focus http-method-label[method="post"] {
-      color: var(--history-menu-selected-post-method-color, #fff);
-    }
-
-    .iron-selected paper-item:focus http-method-label[method="post"] {
-      color: var(--history-menu-focused-post-method-color, rgb(33, 150, 243));
     }
 
     .iron-selected http-method-label {
@@ -43,8 +39,15 @@ the License.
     }
 
     http-method-label {
-      margin-right: 8px;
       font-size: 14px;
+      height: 52px;
+      width: 52px;
+      text-align: center;
+      padding-top: 14px;
+      box-sizing: border-box;
+      border-radius: 50%;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     iron-list {
@@ -52,7 +55,7 @@ the License.
       @apply --history-menu-list;
     }
 
-    paper-item {
+    paper-icon-item {
       @apply --arc-font-menu;
       font-weight: 400;
       min-height: 36px;
@@ -60,9 +63,10 @@ the License.
       @apply --history-menu-list-item;
     }
 
-    .iron-selected paper-item {
+    .iron-selected paper-icon-item,
+    .iron-selected [secondary] {
       background-color: var(--history-menu-selected-item-background-color, #FF9800);
-      color: var(--history-menu-selected-item-color, #fff);
+      color: var(--history-menu-selected-item-color, #000);
     }
 
     .url {
@@ -75,9 +79,8 @@ the License.
 
     .group-header {
       font-weight: var(--history-menu-group-header-font-weigth, bold);
-      border-bottom: 1px solid var(--history-menu-group-header-border-color, #ddd);
-      color: var(--history-menu-group-header-color, rgba(0, 0, 0, 0.54));
-      padding: 12px 16px;
+      color: var(--history-menu-group-header-color, rgba(0, 0, 0, 0.67));
+      padding: 24px 16px;
       @apply --history-menu-group-header;
     }
 
@@ -129,11 +132,14 @@ the License.
           <template is="dom-if" if="[[item.hasHeader]]">
             <div class="group-header">[[item.header]]</div>
           </template>
-          <paper-item on-tap="_openHistory">
-            <http-method-label method="[[item.method]]"></http-method-label>
-            <span class="url">[[item.url]]</span>
-            <paper-ripple></paper-ripple>
-          </paper-item>
+          <paper-icon-item on-tap="_openHistory">
+            <http-method-label method="[[item.method]]" slot="item-icon"></http-method-label>
+            <paper-item-body two-line>
+              <span class="url">[[item.url]]</span>
+              <div secondary>[[item.timeLabel]]</div>
+              <paper-ripple></paper-ripple>
+            </div>
+          </paper-icon-item>
         </div>
       </template>
     </iron-list>
@@ -350,6 +356,12 @@ the License.
       }
       for (let i = 0, len = items.length; i < len; i++) {
         if (items[i]._id === id) {
+          const old = this.items[i];
+          const next = this.items[i + 1];
+          if (old.hasHeader && next && !next.hasHeader) {
+            this.set(['items', i + 1, 'header'], old.header);
+            this.set(['items', i + 1, 'hasHeader'], old.hasHeader);
+          }
           if (i === 0) {
             this._appendTodaysHeader(doc);
           }
@@ -401,6 +413,12 @@ the License.
       }
       for (let i = 0, len = items.length; i < len; i++) {
         if (items[i]._id === id) {
+          const old = this.items[i];
+          const next = this.items[i + 1];
+          if (old.hasHeader && next && !next.hasHeader) {
+            this.set(['items', i + 1, 'header'], old.header);
+            this.set(['items', i + 1, 'hasHeader'], old.hasHeader);
+          }
           this.splice('items', i, 1);
           return;
         }
@@ -554,11 +572,13 @@ the License.
      */
     _groupHistory(items, today, yesterday) {
       const days = [];
-      items = items.map((item) => {
-        let info = this._computeHistoryTime(item._id.split('/')[0]);
+      const result = [];
+      items.forEach((item) => {
+        const info = this._computeHistoryTime(item.updated || item.created);
         if (!info) {
           return;
         }
+        item.timeLabel = info.timeLabel;
         let date = info.formatted;
         if (days.indexOf(date) === -1) {
           days[days.length] = date;
@@ -572,16 +592,15 @@ the License.
           item.hasHeader = true;
           item.header = date;
         }
-        return item;
+        result.push(item);
       });
-      items = items.filter(item => !!item);
-      return items;
+      return result;
     }
 
     _computeHistoryTime(date) {
-      const d = new Date(Number(date));
+      const d = new Date(date);
       if (isNaN(d)) {
-        return '';
+        return;
       }
       const options = {
         weekday: 'long',
@@ -591,7 +610,12 @@ the License.
       };
       return {
         formatted: new Intl.DateTimeFormat(undefined, options).format(d),
-        time: d.getTime()
+        time: d.getTime(),
+        timeLabel: new Intl.DateTimeFormat(undefined, {
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric'
+        }).format(d)
       };
     }
 

@@ -10,7 +10,7 @@
   <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
   <link rel="import" href="../../paper-toast/paper-toast.html">
   <link rel="import" href="../../app-pouchdb/pouchdb.html">
-  <script src="../test/data-generator.js"></script>
+  <script src="data-generator.js"></script>
   <script src="../../chance/dist/chance.min.js"></script>
   <link rel="import" href="../history-menu.html">
   <custom-style>
@@ -25,11 +25,13 @@
   <div class="vertical-section-container centered">
     <h3>The `history-menu`</h3>
     <section>
-      <history-menu></history-menu>
+      <history-menu id="menu"></history-menu>
     </section>
     <button id="generate">Generate 100 history items</button>
     <button id="delete">Clear history</button>
     <button id="refresh">Refresh history</button>
+    <button id="changed">First item changed event</button>
+    <button id="deleted">First item deleted event</button>
     <script>
     document.getElementById('refresh').addEventListener('click', function() {
       document.querySelector('history-menu').refresh();
@@ -48,6 +50,34 @@
       .then(() => {
         document.getElementById('delToast').opened = true;
       });
+    });
+    document.getElementById('changed').addEventListener('click', function() {
+      let item = document.getElementById('menu').items[0];
+      item = Object.assign({}, item);
+      /* global chance */
+      item.name = 'Changed to: ' + chance.sentence({words: 2});
+      item.updated = Date.now();
+      let e = new CustomEvent('request-object-changed', {
+        detail: {
+          request: item,
+          type: 'history-requests',
+          oldId: item._id
+        },
+        bubbles: true
+      });
+      document.body.dispatchEvent(e);
+    });
+    document.getElementById('deleted').addEventListener('click', function() {
+      const item = document.getElementById('menu').items[0];
+      const e = new CustomEvent('request-object-deleted', {
+        detail: {
+          oldRev: item._rev,
+          id: item._id,
+          type: 'history-requests'
+        },
+        bubbles: true
+      });
+      document.body.dispatchEvent(e);
     });
     </script>
   </div>
