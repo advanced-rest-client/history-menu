@@ -494,13 +494,21 @@ the License.
               this.push('items', item);
             });
           }
-          this.$.list.notifyResize();
+          this.notifyResize();
         }
       })
       .catch((e) => {
         this._setQuerying(false);
         console.error('Query menu items', e);
       });
+    }
+    /**
+     * Notifies the list that the resize event occurred.
+     * Should be called whhen content of the list changed but the list wasn't
+     * visible at the time.
+     */
+    notifyResize() {
+      this.$.list.notifyResize();
     }
     /**
      * Processes query results to generate view data model.
