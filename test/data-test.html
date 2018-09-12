@@ -32,15 +32,15 @@
       let element;
       setup(function(done) {
         element = fixture('basic');
-        element.addEventListener('has-items-changed', function(e) {
+        element.addEventListener('has-requests-changed', function(e) {
           if (e.detail.value) {
             done();
           }
         });
       });
 
-      test('items are set', function() {
-        assert.lengthOf(element.items, 25);
+      test('requests are set', function() {
+        assert.lengthOf(element.requests, 25);
       });
 
       test('selectedItem is undefined', function() {
@@ -51,8 +51,8 @@
         assert.isFalse(element.querying);
       });
 
-      test('hasItems is true', function() {
-        assert.isTrue(element.hasItems);
+      test('hasRequests is true', function() {
+        assert.isTrue(element.hasRequests);
       });
 
       test('dataUnavailable is false', function() {
@@ -93,13 +93,13 @@
       }
 
       test('Removes an item from the event', function() {
-        deleteRequest(element.items[0]._id);
-        assert.lengthOf(element.items, 24);
+        deleteRequest(element.requests[0]._id);
+        assert.lengthOf(element.requests, 24);
       });
 
       test('request-object-deleted event doeas nothing for unknown ID', function() {
         deleteRequest('Some-Id');
-        assert.lengthOf(element.items, 25);
+        assert.lengthOf(element.requests, 25);
       });
     });
     </script>

@@ -23,7 +23,8 @@
     "paper-ripple": "PolymerElements/paper-ripple#^2.0.0",
     "paper-progress": "PolymerElements/paper-progress#^2.0.0",
     "iron-list": "PolymerElements/iron-list#^2.0.0",
-    "http-method-label": "advanced-rest-client/http-method-label#^2.0.0"
+    "http-method-label": "advanced-rest-client/http-method-label#^2.0.0",
+    "requests-list-mixin": "advanced-rest-client/requests-list-mixin#2.0.0-preview"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^3.0.1",
@@ -33,7 +34,13 @@
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
     "chance": "^1.0.11",
     "paper-toast": "PolymerElements/paper-toast#^2.0.0",
-    "app-pouchdb": "PolymerElements/app-pouchdb#^2.0.0"
+    "app-pouchdb": "PolymerElements/app-pouchdb#^2.0.0",
+    "web-animations-js": "web-animations/web-animations-js#^2.3",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.0.3",
+    "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
+    "paper-button": "PolymerElements/paper-button#^2.0.0",
+    "arc-data-generator": "advanced-rest-client/arc-data-generator#^1.0.0",
+    "arc-models": "advanced-rest-client/arc-models#2.0.0-preview"
   },
   "ignore": [
     "**/.*",

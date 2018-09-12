@@ -28,8 +28,8 @@
         flush(() => done());
       });
 
-      test('items is undefined', function() {
-        assert.isUndefined(element.items);
+      test('requests is undefined', function() {
+        assert.isUndefined(element.requests);
       });
 
       test('selectedItem is undefined', function() {
@@ -40,8 +40,8 @@
         assert.isUndefined(element.querying);
       });
 
-      test('hasItems is false', function() {
-        assert.isFalse(element.hasItems);
+      test('hasRequests is false', function() {
+        assert.isFalse(element.hasRequests);
       });
 
       test('queryOptions is set', function() {
@@ -69,13 +69,13 @@
 
       test('Appends an item from an event', function() {
         appendRequest();
-        assert.typeOf(element.items, 'array');
-        assert.lengthOf(element.items, 1);
+        assert.typeOf(element.requests, 'array');
+        assert.lengthOf(element.requests, 1);
       });
 
-      test('hasItems changes after adding an item from the event', function() {
+      test('hasRequests changes after adding an item from the event', function() {
         appendRequest();
-        assert.isTrue(element.hasItems);
+        assert.isTrue(element.hasRequests);
       });
 
       test('dataUnavailable is false after adding an item from the event', function(done) {

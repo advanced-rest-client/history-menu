@@ -18,49 +18,23 @@ the License.
 <link rel="import" href="../paper-progress/paper-progress.html">
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../http-method-label/http-method-label.html">
-
+<link rel="import" href="../requests-list-mixin/requests-list-mixin.html">
+<link rel="import" href="../requests-list-mixin/requests-list-styles.html">
 <dom-module id="history-menu">
   <template>
-    <style>
+    <style include="requests-list-styles">
     :host {
       display: block;
       background-color: var(--history-menu-background-color, inherit);
       position: relative;
-
-      --paper-item-icon-width: 72px;
-
       @apply --layout-flex;
       @apply --layout-vertical;
       @apply --history-menu;
     }
 
-    .iron-selected http-method-label {
-      background-color: var(--history-menu-selected-method-label-background-color, #fff);
-    }
-
-    http-method-label {
-      font-size: 14px;
-      height: 52px;
-      width: 52px;
-      text-align: center;
-      padding-top: 14px;
-      box-sizing: border-box;
-      border-radius: 50%;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-
     iron-list {
       flex: 1 1 auto;
       @apply --history-menu-list;
-    }
-
-    paper-icon-item {
-      @apply --arc-font-menu;
-      font-weight: 400;
-      min-height: 36px;
-      cursor: pointer;
-      @apply --history-menu-list-item;
     }
 
     .iron-selected paper-icon-item,
@@ -75,13 +49,6 @@ the License.
       overflow: hidden;
       font-size: 14px;
       @apply --history-menu-url-label;
-    }
-
-    .group-header {
-      font-weight: var(--history-menu-group-header-font-weigth, bold);
-      color: var(--history-menu-group-header-color, rgba(0, 0, 0, 0.67));
-      padding: 24px 16px;
-      @apply --history-menu-group-header;
     }
 
     paper-progress {
@@ -126,16 +93,16 @@ the License.
         <p class="empty-info">Once you made a request it will appear in this place.</p>
       </div>
     </template>
-    <iron-list items="[[items]]" id="list" hidden$="[[!hasItems]]">
+    <iron-list items="[[requests]]" id="list" hidden$="[[!hasRequests]]">
       <template>
         <div data-index$="[[index]]" title$="[[item.url]]" class$="[[_computeItemClass(item._id, selectedItem)]]">
           <template is="dom-if" if="[[item.hasHeader]]">
-            <div class="group-header">[[item.header]]</div>
+            <div class="history-group-header">[[item.header]]</div>
           </template>
           <paper-icon-item on-tap="_openHistory">
             <http-method-label method="[[item.method]]" slot="item-icon"></http-method-label>
-            <paper-item-body two-line>
-              <span class="url">[[item.url]]</span>
+            <paper-item-body two-line$="[[_hasTwoLines]]">
+              <div class="url">[[item.url]]</div>
               <div secondary>[[item.timeLabel]]</div>
               <paper-ripple></paper-ripple>
             </div>
@@ -146,11 +113,11 @@ the License.
   </template>
   <script>
   /**
-   * A list of history items in the ARC main menu.
+   * A list of history requests in the ARC main menu.
    *
    * The element uses direct implementation of the PouchDB to make a query to the
    * datastore. It also listens to events fired by the `arc-model` elements to
-   * update state of the history items.
+   * update state of the history requests.
    *
    * ### Example
    * ```
@@ -188,10 +155,10 @@ the License.
    * `--history-menu-selected-item-background-color` | Background color of the selected list item | `#FF9800`
    * `--history-menu-selected-item-color` | Color of the selected list item | `#fff`
    * `--history-menu-url-label` | Mixin applied to the URL label | `{}`
-   * `--history-menu-group-header` | Mixin applied to the history list group header | `{}`
-   * `--history-menu-group-header-font-weigth` | Group header border color | `bold`
-   * `--history-menu-group-header-border-color` | Group header border color | `#ddd`
-   * `--history-menu-group-header-color` | Font color of the group header` | `rgba(0, 0, 0, 0.54)`
+   * `--history-menu-history-group-header` | Mixin applied to the history list group header | `{}`
+   * `--history-menu-history-group-header-font-weigth` | Group header border color | `bold`
+   * `--history-menu-history-group-header-border-color` | Group header border color | `#ddd`
+   * `--history-menu-history-group-header-color` | Font color of the group header` | `rgba(0, 0, 0, 0.54)`
    * `--arc-menu-empty-info-color` | Color applied to the empty info section | ``
    * `--arc-menu-empty-info-title-color` | Color applied to the title in the empty info section | ``
    *
@@ -199,28 +166,18 @@ the License.
    * @customElement
    * @memberof UiElements
    * @demo demo/index.html
+   * @appliesMixin ArcComponents.RequestsListMixin
    */
-  class HistoryMenu extends Polymer.Element {
+  class HistoryMenu extends ArcComponents.RequestsListMixin(Polymer.Element) {
     static get is() {return 'history-menu';}
     static get properties() {
       return {
-        /**
-         * History items found in the datastore.
-         */
-        items: Array,
         // Database ID of the selected item.
         selectedItem: String,
         // True when the element is querying the database for the data.
         querying: {
           type: Boolean,
           readOnly: true,
-          notify: true
-        },
-        // Computed value, true if the `items` property has values.
-        hasItems: {
-          type: Boolean,
-          value: false,
-          computed: '_computeHasItems(items.length)',
           notify: true
         },
         /**
@@ -249,7 +206,7 @@ the License.
          */
         dataUnavailable: {
           type: Boolean,
-          computed: '_computeDataUnavailable(hasItems, querying)'
+          computed: '_computeDataUnavailable(hasRequests, querying)'
         }
       };
     }
@@ -266,8 +223,6 @@ the License.
     constructor() {
       super();
       this._historyChanged = this._historyChanged.bind(this);
-      this._requestChanged = this._requestChanged.bind(this);
-      this._requestDeleted = this._requestDeleted.bind(this);
       this.refresh = this.refresh.bind(this);
       this._onDatabaseDestroy = this._onDatabaseDestroy.bind(this);
       this._scrollHandler = this._scrollHandler.bind(this);
@@ -275,21 +230,20 @@ the License.
 
     connectedCallback() {
       super.connectedCallback();
+      if (!this.type) {
+        this.type = 'history';
+      }
       window.addEventListener('history-object-changed', this._historyChanged);
-      window.addEventListener('request-object-changed', this._requestChanged);
-      window.addEventListener('request-object-deleted', this._requestDeleted);
       window.addEventListener('data-imported', this.refresh);
       window.addEventListener('datastore-destroyed', this._onDatabaseDestroy);
       this.$.list.addEventListener('scroll', this._scrollHandler);
-      if (!this.querying && !this.items) {
+      if (!this.querying && !this.requests) {
         this.makeQuery();
       }
     }
 
     disconnectedCallback() {
       window.removeEventListener('history-object-changed', this._historyChanged);
-      window.removeEventListener('request-object-changed', this._requestChanged);
-      window.removeEventListener('request-object-deleted', this._requestDeleted);
       window.removeEventListener('data-imported', this.refresh);
       window.removeEventListener('datastore-destroyed', this._onDatabaseDestroy);
       this.$.list.removeEventListener('scroll', this._scrollHandler);
@@ -304,12 +258,12 @@ the License.
         delete this.queryOptions.skip;
       }
       this._setQuerying(false);
-      this.set('items', []);
+      this.set('requests', []);
       this.set('selectedItemIndex', -1);
     }
     /**
      * Refreshes the data from the datastore.
-     * It resets the query options, clears items and makes a query to the datastore.
+     * It resets the query options, clears requests and makes a query to the datastore.
      */
     refresh() {
       this.reset();
@@ -318,99 +272,35 @@ the License.
     // Handler for the `request-object-changed` event. This supports old API
     // and soon it should be replaced with `request-object-changed` event.
     _historyChanged(e) {
-      const id = e.detail.id;
       const doc = e.detail.item;
-      this._processItemChanged(id, doc);
-    }
-    // Handler for the `request-object-changed`
-    _requestChanged(e) {
-      if (e.cancelable) {
-        return;
-      }
-      if (e.detail.type !== 'history-requests') {
-        return;
-      }
-      this._processItemChanged(e.detail.request._id, e.detail.request);
-    }
-    /**
-     * Processes updated request / history item.
-     * If the request object is already on the list it will update the object.
-     * Otherwise the object will be added to the list.
-     *
-     * @param {String} id Database ID of updated object
-     * @param {Object} doc Database object.
-     */
-    _processItemChanged(id, doc) {
-      const items = this.items;
-      if (!items) {
-        return this._pushHistoryItem(doc);
-      }
-      for (let i = 0, len = items.length; i < len; i++) {
-        if (items[i]._id === id) {
-          const old = this.items[i];
-          const next = this.items[i + 1];
-          if (old.hasHeader && next && !next.hasHeader) {
-            this.set(['items', i + 1, 'header'], old.header);
-            this.set(['items', i + 1, 'hasHeader'], old.hasHeader);
-          }
-          if (i === 0) {
-            this._appendTodaysHeader(doc);
-          }
-          this.set(['items', i], doc);
-          return;
-        }
-      }
-      this._pushHistoryItem(doc);
-    }
-    /**
-     * Appends "today" header to the item.
-     *
-     * @param {Object} item History document
-     */
-    _appendTodaysHeader(item) {
-      item.hasHeader = true;
-      item.header = 'Today';
-      item.today = true;
-    }
-    /**
-     * Adds a new history item to the top of the list.
-     */
-    _pushHistoryItem(item) {
-      this._appendTodaysHeader(item);
-      const firstItem = this.get(['items', 0]);
-      if (firstItem === undefined) {
-        return this.set('items', [item]);
-      }
-      if (firstItem && firstItem.today) {
-        delete firstItem.hasHeader;
-        delete firstItem.header;
-        this.set(['items', 0], firstItem);
-      }
-      this.unshift('items', item);
+      this._historyTypeChanged(doc);
     }
 
-    // Hanlder for the `request-object-deleted` event. Removed item from list if found.
-    _requestDeleted(e) {
+    /**
+     * Overrides `_requestDeletedHandler` method to customize behaviour.
+     * @param {CustomEvent} e
+     */
+    _requestDeletedHandler(e) {
       if (e.cancelable) {
         return;
       }
-      if (e.detail.type !== 'history-requests') {
+      if (e.detail.type !== 'history-requests' && e.detail.type !== 'history') {
+        return;
+      }
+      const requests = this.requests;
+      if (!requests || !requests.length) {
         return;
       }
       const id = e.detail.id;
-      const items = this.items;
-      if (!items || !items.length) {
-        return;
-      }
-      for (let i = 0, len = items.length; i < len; i++) {
-        if (items[i]._id === id) {
-          const old = this.items[i];
-          const next = this.items[i + 1];
+      for (let i = 0, len = requests.length; i < len; i++) {
+        if (requests[i]._id === id) {
+          const old = this.requests[i];
+          const next = this.requests[i + 1];
           if (old.hasHeader && next && !next.hasHeader) {
-            this.set(['items', i + 1, 'header'], old.header);
-            this.set(['items', i + 1, 'hasHeader'], old.hasHeader);
+            this.set(['requests', i + 1, 'header'], old.header);
+            this.set(['requests', i + 1, 'hasHeader'], old.hasHeader);
           }
-          this.splice('items', i, 1);
+          this.splice('requests', i, 1);
           return;
         }
       }
@@ -438,10 +328,6 @@ the License.
       if (_id && _id === selectedItem) {
         return 'iron-selected';
       }
-    }
-    // Computes value for the `hasItems` property.
-    _computeHasItems(length) {
-      return !!(length);
     }
     /**
      * Called every time the element changed it's scroll position. It will call the `makeQuery`
@@ -486,12 +372,12 @@ the License.
           this.queryOptions.startkey = response.rows[response.rows.length - 1].key;
           this.queryOptions.skip = 1;
           let res = response.rows.map(item => item.doc);
-          res = this._processResults(res);
-          if (!this.items) {
-            this.set('items', res);
+          res = this._processHistoryResults(res);
+          if (!this.requests) {
+            this.set('requests', res);
           } else {
             res.forEach((item) => {
-              this.push('items', item);
+              this.push('requests', item);
             });
           }
           this.notifyResize();
@@ -499,7 +385,7 @@ the License.
       })
       .catch((e) => {
         this._setQuerying(false);
-        console.error('Query menu items', e);
+        console.error('Query menu requests', e);
       });
     }
     /**
@@ -510,117 +396,10 @@ the License.
     notifyResize() {
       this.$.list.notifyResize();
     }
-    /**
-     * Processes query results to generate view data model.
-     * @param {Array} res List of history items retreived from the datastore.
-     * @return {Array} Processed data items.
-     */
-    _processResults(res) {
-      // updates required timestamps
-      res = this._ensureTimestamps(res);
-      // sorts by updated time
-      res.sort(this._sortResults);
-      const today = this._getTodayTimestamp();
-      const yesterday = this._getYesterdayTimestamp(today);
-      res = this._groupHistory(res, today, yesterday);
-      return res;
-    }
-    /**
-     * Ensures that the history objects have the `updated` property
-     * required by further computations while processing results.
-     *
-     * @param {Array} items List of history items
-     * @return {Array} The same array but all items will have `updated`
-     * property.
-     */
-    _ensureTimestamps(items) {
-      return items.map((item) => {
-        if (!item.updated || item.updated !== item.updated) {
-          if (item.created && item.created === item.created) {
-            item.updated = item.created;
-          } else {
-            item.updated = Date.now();
-          }
-        }
-        return item;
-      });
-    }
-    // Sorts the query results by `updated` property.
-    _sortResults(a, b) {
-      if (a.updated > b.updated) {
-        return -1;
-      }
-      if (a.updated < b.updated) {
-        return 1;
-      }
-      return 0;
-    }
-
-    // Creates a timestamp fot today, midnight
-    _getTodayTimestamp() {
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-      return now.getTime();
-    }
-    // Computes yesterday's midninght based on today's mignight timestamp
-    _getYesterdayTimestamp(todayTimestamp) {
-      return todayTimestamp - 86400000; // 24 h milliseconds
-    }
-    /**
-     * Creates a headers for each day and group requests in each day group.
-     */
-    _groupHistory(items, today, yesterday) {
-      const days = [];
-      const result = [];
-      items.forEach((item) => {
-        const info = this._computeHistoryTime(item.updated || item.created);
-        if (!info) {
-          return;
-        }
-        item.timeLabel = info.timeLabel;
-        let date = info.formatted;
-        if (days.indexOf(date) === -1) {
-          days[days.length] = date;
-          let time = info.time;
-          if (time === today) {
-            item.today = true;
-            date = 'Today';
-          } else if (time === yesterday) {
-            date = 'Yesterday';
-          }
-          item.hasHeader = true;
-          item.header = date;
-        }
-        result.push(item);
-      });
-      return result;
-    }
-
-    _computeHistoryTime(date) {
-      const d = new Date(date);
-      if (isNaN(d)) {
-        return;
-      }
-      const options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      };
-      return {
-        formatted: new Intl.DateTimeFormat(undefined, options).format(d),
-        time: d.getTime(),
-        timeLabel: new Intl.DateTimeFormat(undefined, {
-          hour: 'numeric',
-          minute: 'numeric',
-          second: 'numeric'
-        }).format(d)
-      };
-    }
 
     // Computes value for the `dataUnavailable` property.
-    _computeDataUnavailable(hasItems, querying) {
-      return !hasItems && !querying;
+    _computeDataUnavailable(hasRequests, querying) {
+      return !hasRequests && !querying;
     }
     // Handler for the `tap` event on the item.
     _openHistory(e) {
