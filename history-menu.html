@@ -99,13 +99,13 @@ the License.
           <template is="dom-if" if="[[item.hasHeader]]">
             <div class="history-group-header">[[item.header]]</div>
           </template>
-          <paper-icon-item on-tap="_openHistory">
+          <paper-icon-item on-click="_openHistory">
             <http-method-label method="[[item.method]]" slot="item-icon"></http-method-label>
             <paper-item-body two-line$="[[_hasTwoLines]]">
               <div class="url">[[item.url]]</div>
               <div secondary>[[item.timeLabel]]</div>
               <paper-ripple></paper-ripple>
-            </div>
+            </paper-item-body>
           </paper-icon-item>
         </div>
       </template>
@@ -323,11 +323,15 @@ the License.
     }
     /**
      * Computes class name for the HTML element representing a history item.
+     * @param {String} id
+     * @param {String} selectedItem
+     * @return {String}
      */
-    _computeItemClass(_id, selectedItem) {
-      if (_id && _id === selectedItem) {
+    _computeItemClass(id, selectedItem) {
+      if (id && id === selectedItem) {
         return 'iron-selected';
       }
+      return '';
     }
     /**
      * Called every time the element changed it's scroll position. It will call the `makeQuery`
@@ -371,7 +375,7 @@ the License.
           // Set up pagination.
           this.queryOptions.startkey = response.rows[response.rows.length - 1].key;
           this.queryOptions.skip = 1;
-          let res = response.rows.map(item => item.doc);
+          let res = response.rows.map((item) => item.doc);
           res = this._processHistoryResults(res);
           if (!this.requests) {
             this.set('requests', res);
@@ -401,7 +405,7 @@ the License.
     _computeDataUnavailable(hasRequests, querying) {
       return !hasRequests && !querying;
     }
-    // Handler for the `tap` event on the item.
+    // Handler for the `click` event on the item.
     _openHistory(e) {
       const id = e.model.get('item._id');
       this.dispatchEvent(new CustomEvent('navigate', {
