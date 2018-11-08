@@ -18,6 +18,7 @@ the License.
 <link rel="import" href="../paper-progress/paper-progress.html">
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../http-method-label/http-method-label.html">
+<link rel="import" href="../history-list-mixin/history-list-mixin.html">
 <link rel="import" href="../requests-list-mixin/requests-list-mixin.html">
 <link rel="import" href="../requests-list-mixin/requests-list-styles.html">
 <dom-module id="history-menu">
@@ -167,159 +168,31 @@ the License.
    * @memberof UiElements
    * @demo demo/index.html
    * @appliesMixin ArcComponents.RequestsListMixin
+   * @appliesMixin ArcComponents.HistoryListMixin
    */
-  class HistoryMenu extends ArcComponents.RequestsListMixin(Polymer.Element) {
+  class HistoryMenu extends ArcComponents.HistoryListMixin(
+    ArcComponents.RequestsListMixin(Polymer.Element)) {
     static get is() {return 'history-menu';}
     static get properties() {
       return {
         // Database ID of the selected item.
-        selectedItem: String,
-        // True when the element is querying the database for the data.
-        querying: {
-          type: Boolean,
-          readOnly: true,
-          notify: true
-        },
-        /**
-         * Database query options for pagination.
-         * Override this value to change the query options like limit of the results in one call.
-         *
-         * This is query options passed to the PouchDB `allDocs` function. Note that it will not
-         * set `include_docs` option. A conviniet shortcut is to set the the `includeDocs` property
-         * and the directive will be added automatically.
-         */
-        queryOptions: {
-          type: Object,
-          readOnly: true,
-          value() {
-            return {
-              limit: 25,
-              descending: true,
-              // jscs:disable
-              include_docs: true
-              // jscs:enable
-            };
-          }
-        },
-        /**
-         * Computed value. True if query ended and there's no results.
-         */
-        dataUnavailable: {
-          type: Boolean,
-          computed: '_computeDataUnavailable(hasRequests, querying)'
-        }
+        selectedItem: String
       };
-    }
-
-    // Returns a handler to the datastore instance
-    get _db() {
-      /* global PouchDB */
-      if (typeof PouchDB === 'undefined') {
-        console.error('PouchDB is not included into the application.');
-      }
-      return new PouchDB('history-requests');
     }
 
     constructor() {
       super();
-      this._historyChanged = this._historyChanged.bind(this);
-      this.refresh = this.refresh.bind(this);
-      this._onDatabaseDestroy = this._onDatabaseDestroy.bind(this);
       this._scrollHandler = this._scrollHandler.bind(this);
     }
 
     connectedCallback() {
       super.connectedCallback();
-      if (!this.type) {
-        this.type = 'history';
-      }
-      window.addEventListener('history-object-changed', this._historyChanged);
-      window.addEventListener('data-imported', this.refresh);
-      window.addEventListener('datastore-destroyed', this._onDatabaseDestroy);
       this.$.list.addEventListener('scroll', this._scrollHandler);
-      if (!this.querying && !this.requests) {
-        this.makeQuery();
-      }
     }
 
     disconnectedCallback() {
-      window.removeEventListener('history-object-changed', this._historyChanged);
-      window.removeEventListener('data-imported', this.refresh);
-      window.removeEventListener('datastore-destroyed', this._onDatabaseDestroy);
       this.$.list.removeEventListener('scroll', this._scrollHandler);
       super.disconnectedCallback();
-    }
-    /**
-     * Resets the state of the variables.
-     */
-    reset() {
-      if (this.queryOptions) {
-        delete this.queryOptions.startkey;
-        delete this.queryOptions.skip;
-      }
-      this._setQuerying(false);
-      this.set('requests', []);
-      this.set('selectedItemIndex', -1);
-    }
-    /**
-     * Refreshes the data from the datastore.
-     * It resets the query options, clears requests and makes a query to the datastore.
-     */
-    refresh() {
-      this.reset();
-      this.makeQuery();
-    }
-    // Handler for the `request-object-changed` event. This supports old API
-    // and soon it should be replaced with `request-object-changed` event.
-    _historyChanged(e) {
-      const doc = e.detail.item;
-      this._historyTypeChanged(doc);
-    }
-
-    /**
-     * Overrides `_requestDeletedHandler` method to customize behaviour.
-     * @param {CustomEvent} e
-     */
-    _requestDeletedHandler(e) {
-      if (e.cancelable) {
-        return;
-      }
-      if (e.detail.type !== 'history-requests' && e.detail.type !== 'history') {
-        return;
-      }
-      const requests = this.requests;
-      if (!requests || !requests.length) {
-        return;
-      }
-      const id = e.detail.id;
-      for (let i = 0, len = requests.length; i < len; i++) {
-        if (requests[i]._id === id) {
-          const old = this.requests[i];
-          const next = this.requests[i + 1];
-          if (old.hasHeader && next && !next.hasHeader) {
-            this.set(['requests', i + 1, 'header'], old.header);
-            this.set(['requests', i + 1, 'hasHeader'], old.hasHeader);
-          }
-          this.splice('requests', i, 1);
-          return;
-        }
-      }
-    }
-
-    // Handler for the `datastore-destroyed` custom event
-    _onDatabaseDestroy(e) {
-      let datastore = e.detail.datastore;
-      if (!datastore || !datastore.length) {
-        return;
-      }
-      if (typeof datastore === 'string') {
-        datastore = [datastore];
-      }
-      if (datastore.indexOf('history-requests') === -1 && datastore[0] !== 'all') {
-        return;
-      }
-      this._db.close()
-      .then(() => this.refresh());
     }
     /**
      * Computes class name for the HTML element representing a history item.
@@ -345,52 +218,8 @@ the License.
       const elm = this.$.list;
       const delta = elm.scrollHeight - (elm.scrollTop + elm.offsetHeight);
       if (delta < 120) {
-        this.makeQuery();
+        this.loadNext();
       }
-    }
-    /**
-     * The function to call when new query for data is needed.
-     */
-    makeQuery() {
-      if (this.__makingQuery) {
-        return;
-      }
-      this.__makingQuery = true;
-      setTimeout(() => {
-        this.__makingQuery = false;
-        this._loadPage();
-      }, 20);
-    }
-    /**
-     * Performs the query and processes the result.
-     */
-    _loadPage() {
-      const db = this._db;
-      this._setQuerying(true);
-
-      db.allDocs(this.queryOptions)
-      .then((response) => {
-        this._setQuerying(false);
-        if (response && response.rows.length > 0) {
-          // Set up pagination.
-          this.queryOptions.startkey = response.rows[response.rows.length - 1].key;
-          this.queryOptions.skip = 1;
-          let res = response.rows.map((item) => item.doc);
-          res = this._processHistoryResults(res);
-          if (!this.requests) {
-            this.set('requests', res);
-          } else {
-            res.forEach((item) => {
-              this.push('requests', item);
-            });
-          }
-          this.notifyResize();
-        }
-      })
-      .catch((e) => {
-        this._setQuerying(false);
-        console.error('Query menu requests', e);
-      });
     }
     /**
      * Notifies the list that the resize event occurred.
@@ -399,11 +228,6 @@ the License.
      */
     notifyResize() {
       this.$.list.notifyResize();
-    }
-
-    // Computes value for the `dataUnavailable` property.
-    _computeDataUnavailable(hasRequests, querying) {
-      return !hasRequests && !querying;
     }
     // Handler for the `click` event on the item.
     _openHistory(e) {
