@@ -4,7 +4,7 @@
   "license": "Apache-2.0",
   "description": "A list of history items in the ARC main menu",
   "devDependencies": {
-    "@polymer/gen-typescript-declarations": "^1.1.1"
+    "@polymer/gen-typescript-declarations": "^1.6.0"
   },
   "private": false,
   "main": "history-menu.html",
