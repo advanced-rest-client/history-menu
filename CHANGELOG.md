@@ -1,3 +1,17 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/advanced-rest-client/history-menu/compare/0.1.7...2.0.0) (2019-01-10)
+
+
+### Docs
+
+* Updated styles docs ([11a858cd9cec03a07f8dd144bbce5094f5dcd058](https://github.com/advanced-rest-client/history-menu/commit/11a858cd9cec03a07f8dd144bbce5094f5dcd058))
+
+### Update
+
+* Adding requests lists mixin and styles ([f6a41207d7a0a25d40048f34db9f5b18151fbf45](https://github.com/advanced-rest-client/history-menu/commit/f6a41207d7a0a25d40048f34db9f5b18151fbf45))
+
+
+
 <a name="0.1.8"></a>
 ## [0.1.8](https://github.com/advanced-rest-client/history-menu/compare/0.1.7...0.1.8) (2018-01-30)
 
