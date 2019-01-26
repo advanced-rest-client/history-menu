@@ -10,7 +10,6 @@
 
 
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
-// tslint:disable:no-any describes the API as best we are able today
 
 /// <reference path="../polymer/types/polymer-element.d.ts" />
 /// <reference path="../paper-item/paper-icon-item.d.ts" />
@@ -109,7 +108,7 @@ declare namespace UiElements {
     /**
      * Handler for the `click` event on the item.
      */
-    _openHistory(e: any): void;
+    _openHistory(e: ClickEvent|null): void;
   }
 }
 

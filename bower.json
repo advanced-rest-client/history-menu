@@ -1,7 +1,7 @@
 {
   "name": "history-menu",
   "description": "A list of history items in the ARC main menu",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "Apache-2.0",
   "authors": [
     "Pawel Psztyc",
@@ -24,8 +24,8 @@
     "paper-progress": "PolymerElements/paper-progress#^2.0.0",
     "iron-list": "PolymerElements/iron-list#^2.0.0",
     "http-method-label": "advanced-rest-client/http-method-label#^2.0.0",
-    "requests-list-mixin": "advanced-rest-client/requests-list-mixin#^2.0.0",
-    "history-list-mixin": "advanced-rest-client/history-list-mixin#^2.0.0"
+    "requests-list-mixin": "advanced-rest-client/requests-list-mixin#^2.0.1",
+    "history-list-mixin": "advanced-rest-client/history-list-mixin#^2.0.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^3.0.1",
@@ -41,7 +41,9 @@
     "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
     "paper-button": "PolymerElements/paper-button#^2.0.0",
     "arc-data-generator": "advanced-rest-client/arc-data-generator#^1.0.0",
-    "arc-models": "advanced-rest-client/arc-models#2.0.0-preview"
+    "arc-models": "advanced-rest-client/arc-models#2.0.0-preview",
+    "http-method-selector": "advanced-rest-client/http-method-selector#^2.0.1",
+    "paper-input": "PolymerElements/paper-input#^2.1.0"
   },
   "ignore": [
     "**/.*",

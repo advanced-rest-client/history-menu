@@ -18,6 +18,8 @@
   <link rel="import" href="../../paper-item/paper-item.html">
   <link rel="import" href="../../paper-button/paper-button.html">
   <link rel="import" href="../../paper-listbox/paper-listbox.html">
+  <link rel="import" href="../../http-method-selector/http-method-selector-mini.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
   <link rel="import" href="../../neon-animation/web-animations.html">
   <script src="../../chance/dist/chance.min.js"></script>
   <link rel="import" href="../history-menu.html">
@@ -32,6 +34,10 @@
 
     history-menu {
       height: 600px;
+    }
+
+    h2 {
+      @apply --paper-font-headline;
     }
 
     .card {
@@ -54,6 +60,7 @@
       </section>
 
       <section class="centered card">
+        <h2>Options</h2>
         <paper-button on-click="generate">Generate 100 requests</paper-button>
         <paper-button on-click="delete">Clear list</paper-button>
         <paper-button on-click="refresh">Refresh list</paper-button>
@@ -70,6 +77,22 @@
         </paper-dropdown-menu>
       </section>
 
+      <section class="centered card">
+        <h2>Add request</h2>
+        <div>
+          <http-method-selector-mini method="{{request.method}}"></http-method-selector-mini>
+          <paper-input label="URL" value="{{request.url}}"></paper-input>
+        </div>
+        <div>
+          <paper-input label="Request time" type="datetime-local" value="{{request.created}}"></paper-input>
+        </div>
+        <div>
+          <paper-input label="History id" value="{{request._id}}"></paper-input>
+        </div>
+        <paper-button on-click="addRequest">Add</paper-button>
+      </section>
+
+
       <paper-toast id="genToast" text="The request data has been generated"></paper-toast>
       <paper-toast id="delToast" text="The request data has been removed"></paper-toast>
       <paper-toast id="navToast" text="Navigation ocurred"></paper-toast>
@@ -77,6 +100,15 @@
   </dom-bind>
   <script>
   (function(scope) {
+    const now = new Date();
+    now.setTime(now.getTime() - now.getTimezoneOffset() * 60 * 1000);
+    scope.request = {
+      _id: 'test-id',
+      method: 'GET',
+      url: 'https://api.domain.com',
+      type: 'history',
+      created: now.toISOString().substr(0, 16)
+    };
     scope.refresh = function() {
       document.querySelector('history-menu').refresh();
     };
@@ -141,6 +173,20 @@
       const e = new CustomEvent('request-object-changed', {
         detail: {
           request: item,
+          type: 'history'
+        },
+        bubbles: true
+      });
+      document.body.dispatchEvent(e);
+    };
+
+    scope.addRequest = () => {
+      const request = Object.assign({}, scope.request);
+      const d = new Date(request.created);
+      request.created = d.getTime();
+      const e = new CustomEvent('request-object-changed', {
+        detail: {
+          request,
           type: 'history'
         },
         bubbles: true

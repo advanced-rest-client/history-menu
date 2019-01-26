@@ -577,7 +577,7 @@
               "column": 4
             },
             "end": {
-              "line": 214,
+              "line": 216,
               "column": 5
             }
           },
@@ -600,11 +600,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 219,
+              "line": 221,
               "column": 4
             },
             "end": {
-              "line": 244,
+              "line": 246,
               "column": 5
             }
           },
@@ -628,11 +628,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 251,
+              "line": 253,
               "column": 4
             },
             "end": {
-              "line": 262,
+              "line": 264,
               "column": 5
             }
           },
@@ -655,11 +655,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 267,
+              "line": 269,
               "column": 4
             },
             "end": {
-              "line": 287,
+              "line": 289,
               "column": 5
             }
           },
@@ -669,90 +669,6 @@
               "name": "request",
               "type": "Object",
               "description": "Changed request object."
-            }
-          ],
-          "return": {
-            "type": "void"
-          },
-          "inheritedFrom": "ArcComponents.RequestsListMixin"
-        },
-        {
-          "name": "_historyTypeChanged",
-          "description": "Handles request change when type is saved or history.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "../requests-list-mixin/requests-list-mixin.html",
-            "start": {
-              "line": 292,
-              "column": 4
-            },
-            "end": {
-              "line": 323,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "request",
-              "type": "Object",
-              "description": "Changed request object."
-            }
-          ],
-          "return": {
-            "type": "void"
-          },
-          "inheritedFrom": "ArcComponents.RequestsListMixin"
-        },
-        {
-          "name": "_appendTodaysHeader",
-          "description": "Appends \"today\" header to the item.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "../requests-list-mixin/requests-list-mixin.html",
-            "start": {
-              "line": 330,
-              "column": 4
-            },
-            "end": {
-              "line": 334,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "item",
-              "type": "Object",
-              "description": "History document"
-            }
-          ],
-          "return": {
-            "type": "void"
-          },
-          "inheritedFrom": "ArcComponents.RequestsListMixin"
-        },
-        {
-          "name": "_unshiftHistoryItem",
-          "description": "Adds a new history item to the top of the list.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "../requests-list-mixin/requests-list-mixin.html",
-            "start": {
-              "line": 339,
-              "column": 4
-            },
-            "end": {
-              "line": 352,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "item",
-              "type": "Object",
-              "description": "A history item to add"
             }
           ],
           "return": {
@@ -767,11 +683,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 358,
+              "line": 295,
               "column": 4
             },
             "end": {
-              "line": 362,
+              "line": 299,
               "column": 5
             }
           },
@@ -796,11 +712,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 368,
+              "line": 305,
               "column": 4
             },
             "end": {
-              "line": 372,
+              "line": 309,
               "column": 5
             }
           },
@@ -825,11 +741,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 380,
+              "line": 317,
               "column": 4
             },
             "end": {
-              "line": 385,
+              "line": 322,
               "column": 5
             }
           },
@@ -859,11 +775,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 392,
+              "line": 328,
               "column": 4
             },
             "end": {
-              "line": 425,
+              "line": 361,
               "column": 5
             }
           },
@@ -888,11 +804,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 434,
+              "line": 370,
               "column": 4
             },
             "end": {
-              "line": 448,
+              "line": 384,
               "column": 5
             }
           },
@@ -919,11 +835,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 455,
+              "line": 391,
               "column": 4
             },
             "end": {
-              "line": 458,
+              "line": 394,
               "column": 5
             }
           },
@@ -948,11 +864,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 464,
+              "line": 400,
               "column": 4
             },
             "end": {
-              "line": 483,
+              "line": 419,
               "column": 5
             }
           },
@@ -977,11 +893,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 485,
+              "line": 421,
               "column": 4
             },
             "end": {
-              "line": 487,
+              "line": 423,
               "column": 5
             }
           },
@@ -1000,11 +916,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 493,
+              "line": 429,
               "column": 4
             },
             "end": {
-              "line": 498,
+              "line": 434,
               "column": 5
             }
           },
@@ -1028,11 +944,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 504,
+              "line": 440,
               "column": 4
             },
             "end": {
-              "line": 522,
+              "line": 458,
               "column": 5
             }
           },
@@ -1055,11 +971,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 528,
+              "line": 464,
               "column": 4
             },
             "end": {
-              "line": 541,
+              "line": 477,
               "column": 5
             }
           },
@@ -1077,11 +993,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 548,
+              "line": 484,
               "column": 4
             },
             "end": {
-              "line": 564,
+              "line": 500,
               "column": 5
             }
           },
@@ -1111,11 +1027,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 572,
+              "line": 508,
               "column": 4
             },
             "end": {
-              "line": 580,
+              "line": 516,
               "column": 5
             }
           },
@@ -1139,11 +1055,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 586,
+              "line": 522,
               "column": 4
             },
             "end": {
-              "line": 596,
+              "line": 532,
               "column": 5
             }
           },
@@ -1638,7 +1554,7 @@
               "column": 6
             },
             "end": {
-              "line": 428,
+              "line": 426,
               "column": 7
             }
           },
@@ -1671,11 +1587,11 @@
           "sourceRange": {
             "file": "../history-list-mixin/history-list-mixin.html",
             "start": {
-              "line": 438,
+              "line": 436,
               "column": 6
             },
             "end": {
-              "line": 464,
+              "line": 456,
               "column": 7
             }
           },
@@ -1694,17 +1610,168 @@
           "inheritedFrom": "ArcComponents.HistoryListMixin"
         },
         {
+          "name": "_historyTypeChanged",
+          "description": "Handles request model change when the type is history.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../history-list-mixin/history-list-mixin.html",
+            "start": {
+              "line": 461,
+              "column": 6
+            },
+            "end": {
+              "line": 482,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "request",
+              "type": "Object",
+              "description": "Changed request object."
+            }
+          ],
+          "return": {
+            "type": "void"
+          },
+          "inheritedFrom": "ArcComponents.HistoryListMixin"
+        },
+        {
+          "name": "_removeItem",
+          "description": "Removes history item at position.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../history-list-mixin/history-list-mixin.html",
+            "start": {
+              "line": 487,
+              "column": 6
+            },
+            "end": {
+              "line": 497,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "index",
+              "type": "Number",
+              "description": "Item's index in requests array"
+            }
+          ],
+          "return": {
+            "type": "void"
+          },
+          "inheritedFrom": "ArcComponents.HistoryListMixin"
+        },
+        {
+          "name": "_insertItem",
+          "description": "Adds a new history item to the list at a position where its `updated` or\n`created` time suggests.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../history-list-mixin/history-list-mixin.html",
+            "start": {
+              "line": 503,
+              "column": 6
+            },
+            "end": {
+              "line": 528,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "item",
+              "type": "Object",
+              "description": "History model to add."
+            }
+          ],
+          "return": {
+            "type": "void"
+          },
+          "inheritedFrom": "ArcComponents.HistoryListMixin"
+        },
+        {
+          "name": "_historyInsertPosition",
+          "description": "Determines a position of a history item to be inserted at.\nThe position is determined by `time` argument.\nIt always returns the position where the item to insert is newer than next item on the list.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../history-list-mixin/history-list-mixin.html",
+            "start": {
+              "line": 536,
+              "column": 6
+            },
+            "end": {
+              "line": 556,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "time",
+              "type": "Number",
+              "description": "Request's `updated` or `created` property,."
+            }
+          ],
+          "return": {
+            "type": "Number",
+            "desc": "Position at which insert the request."
+          },
+          "inheritedFrom": "ArcComponents.HistoryListMixin"
+        },
+        {
+          "name": "_appendHistoryTimeHeader",
+          "description": "Appends time properties to a history item.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../history-list-mixin/history-list-mixin.html",
+            "start": {
+              "line": 563,
+              "column": 6
+            },
+            "end": {
+              "line": 579,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "item",
+              "type": "Object",
+              "description": "History model"
+            },
+            {
+              "name": "timeInfo",
+              "type": "Object",
+              "description": "Generated time info object."
+            },
+            {
+              "name": "addHeader",
+              "type": "Boolean",
+              "description": "True to set header values."
+            }
+          ],
+          "return": {
+            "type": "void"
+          },
+          "inheritedFrom": "ArcComponents.HistoryListMixin"
+        },
+        {
           "name": "_resetHistoryObject",
           "description": "Resets history object by removing items that has been added\nwhen processing response.",
           "privacy": "protected",
           "sourceRange": {
             "file": "../history-list-mixin/history-list-mixin.html",
             "start": {
-              "line": 471,
+              "line": 586,
               "column": 6
             },
             "end": {
-              "line": 478,
+              "line": 593,
               "column": 7
             }
           },
@@ -1728,11 +1795,11 @@
           "sourceRange": {
             "file": "../history-list-mixin/history-list-mixin.html",
             "start": {
-              "line": 488,
+              "line": 603,
               "column": 6
             },
             "end": {
-              "line": 515,
+              "line": 630,
               "column": 7
             }
           },
@@ -1757,11 +1824,11 @@
           "sourceRange": {
             "file": "../history-list-mixin/history-list-mixin.html",
             "start": {
-              "line": 523,
+              "line": 638,
               "column": 6
             },
             "end": {
-              "line": 535,
+              "line": 650,
               "column": 7
             }
           },
@@ -1853,18 +1920,19 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 232,
+              "line": 235,
               "column": 4
             },
             "end": {
-              "line": 243,
+              "line": 246,
               "column": 5
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "e"
+              "name": "e",
+              "type": "ClickEvent"
             }
           ],
           "return": {
@@ -1886,7 +1954,7 @@
           "column": 2
         },
         "end": {
-          "line": 244,
+          "line": 247,
           "column": 3
         }
       },

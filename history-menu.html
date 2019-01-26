@@ -229,7 +229,10 @@ the License.
     notifyResize() {
       this.$.list.notifyResize();
     }
-    // Handler for the `click` event on the item.
+    /**
+     * Handler for the `click` event on the item.
+     * @param {ClickEvent} e
+     */
     _openHistory(e) {
       const id = e.model.get('item._id');
       this.dispatchEvent(new CustomEvent('navigate', {
