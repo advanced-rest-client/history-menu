@@ -281,17 +281,32 @@
           assert.isTrue(spy.called);
         });
 
-        test('Sets transfer data', () => {
+        test('Sets arc/request-object transfer data', () => {
           const spy = sinon.spy(element, '_dragStart');
           dispatch(element);
           const data = spy.args[0][0].dataTransfer.getData('arc/request-object');
           assert.typeOf(data, 'string');
         });
 
-        test('Sets dropEffect', () => {
+        test('Sets arc/history-request data', () => {
           const spy = sinon.spy(element, '_dragStart');
           dispatch(element);
-          assert.equal(spy.args[0][0].dropEffect, 'copy');
+          const data = spy.args[0][0].dataTransfer.getData('arc/history-request');
+          assert.equal(data, element.requests[0]._id);
+        });
+
+        test('Sets arc-source/history-menu transfer data', () => {
+          const spy = sinon.spy(element, '_dragStart');
+          dispatch(element);
+          const data = spy.args[0][0].dataTransfer.getData('arc-source/history-menu');
+          assert.equal(data, element.requests[0]._id);
+        });
+
+        test('Ignores event when draggableEnabled not set', () => {
+          element.draggableEnabled = false;
+          const spy = sinon.spy(element, '_dragStart');
+          dispatch(element);
+          assert.isUndefined(spy.args[0][0].dropEffect);
         });
 
         test('Ignores event when draggableEnabled not set', () => {

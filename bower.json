@@ -1,7 +1,7 @@
 {
   "name": "history-menu",
   "description": "A list of history items in the ARC main menu",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "license": "Apache-2.0",
   "authors": [
     "Pawel Psztyc",

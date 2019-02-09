@@ -249,9 +249,12 @@ the License.
       if (!this.draggableEnabled) {
         return;
       }
-      const data = JSON.stringify(e.model.get('item'));
+      const request = e.model.get('item');
+      const data = JSON.stringify(request);
       e.dataTransfer.setData('arc/request-object', data);
-      e.dropEffect = 'copy';
+      e.dataTransfer.setData('arc/history-request', request._id);
+      e.dataTransfer.setData('arc-source/history-menu', request._id);
+      e.dataTransfer.effectAllowed = 'copy';
     }
     /**
      * Computes value for the `draggable` property of the list item.
