@@ -24,7 +24,7 @@
     "paper-progress": "PolymerElements/paper-progress#^2.0.0",
     "iron-list": "PolymerElements/iron-list#^2.0.0",
     "http-method-label": "advanced-rest-client/http-method-label#^2.0.0",
-    "requests-list-mixin": "advanced-rest-client/requests-list-mixin#^2.0.1",
+    "requests-list-mixin": "advanced-rest-client/requests-list-mixin#^2.0.0",
     "history-list-mixin": "advanced-rest-client/history-list-mixin#^2.0.1"
   },
   "devDependencies": {

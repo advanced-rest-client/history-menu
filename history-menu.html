@@ -38,12 +38,6 @@ the License.
       @apply --history-menu-list;
     }
 
-    .iron-selected paper-icon-item,
-    .iron-selected [secondary] {
-      background-color: var(--history-menu-selected-item-background-color, #FF9800);
-      color: var(--history-menu-selected-item-color, #000);
-    }
-
     .url {
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -100,7 +94,7 @@ the License.
           <template is="dom-if" if="[[item.hasHeader]]">
             <div class="history-group-header">[[item.header]]</div>
           </template>
-          <paper-icon-item on-click="_openHistory">
+          <paper-icon-item on-click="_openHistory" class="request-list-item">
             <http-method-label method="[[item.method]]" slot="item-icon"></http-method-label>
             <paper-item-body two-line$="[[_hasTwoLines]]">
               <div class="url">[[item.url]]</div>
@@ -187,6 +181,7 @@ the License.
 
     connectedCallback() {
       super.connectedCallback();
+      this.type = 'history';
       this.$.list.addEventListener('scroll', this._scrollHandler);
     }
 
@@ -235,15 +230,7 @@ the License.
      */
     _openHistory(e) {
       const id = e.model.get('item._id');
-      this.dispatchEvent(new CustomEvent('navigate', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          base: 'request',
-          type: 'history',
-          id
-        }
-      }));
+      this._openRequest(id);
     }
   }
   window.customElements.define(HistoryMenu.is, HistoryMenu);
