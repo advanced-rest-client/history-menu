@@ -97,3 +97,22 @@
 
 
 
+## [2.0.2](https://github.com/advanced-rest-client/history-menu/compare/0.1.7...2.0.2) (2019-02-09)
+
+
+### Docs
+
+* Updated styles docs ([11a858cd9cec03a07f8dd144bbce5094f5dcd058](https://github.com/advanced-rest-client/history-menu/commit/11a858cd9cec03a07f8dd144bbce5094f5dcd058))
+
+### New
+
+* Adding support for draggable action ([5ac17c6ba58f8277ee49e85f0cdcf929df6b5f5f](https://github.com/advanced-rest-client/history-menu/commit/5ac17c6ba58f8277ee49e85f0cdcf929df6b5f5f))
+
+### Update
+
+* Adding requests lists mixin and styles ([f6a41207d7a0a25d40048f34db9f5b18151fbf45](https://github.com/advanced-rest-client/history-menu/commit/f6a41207d7a0a25d40048f34db9f5b18151fbf45))
+* Updating dependencies ([d50ad47f71ade2167fbf8c534dd08b1b1a15c43e](https://github.com/advanced-rest-client/history-menu/commit/d50ad47f71ade2167fbf8c534dd08b1b1a15c43e))
+* Updating requests lsit version ([3b758f17686e38ed9964c3874a293d6344903b91](https://github.com/advanced-rest-client/history-menu/commit/3b758f17686e38ed9964c3874a293d6344903b91))
+
+
+
