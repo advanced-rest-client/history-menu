@@ -94,7 +94,7 @@ the License.
           <template is="dom-if" if="[[item.hasHeader]]">
             <div class="history-group-header">[[item.header]]</div>
           </template>
-          <paper-icon-item on-click="_openHistory" class="request-list-item">
+          <paper-icon-item on-click="_openHistory" class="request-list-item" draggable$="[[_computeDraggableValue(draggableEnabled)]]" on-dragstart="_dragStart">
             <http-method-label method="[[item.method]]" slot="item-icon"></http-method-label>
             <paper-item-body two-line$="[[_hasTwoLines]]">
               <div class="url">[[item.url]]</div>
@@ -170,7 +170,13 @@ the License.
     static get properties() {
       return {
         // Database ID of the selected item.
-        selectedItem: String
+        selectedItem: String,
+        /**
+         * Adds draggable property to the request list item element.
+         * The `dataTransfer` object has `arc/request-object` mime type with
+         * serialized JSON with request model.
+         */
+        draggableEnabled: {type: Boolean, value: false}
       };
     }
 
@@ -231,6 +237,31 @@ the License.
     _openHistory(e) {
       const id = e.model.get('item._id');
       this._openRequest(id);
+    }
+    /**
+     * Handler for the `dragstart` event added to the list item when `draggableEnabled`
+     * is set to true.
+     * This function sets request data on the `dataTransfer` object with `arc/request-object`
+     * mime type. The request data is a serialized JSON with request model.
+     * @param {Event} e
+     */
+    _dragStart(e) {
+      if (!this.draggableEnabled) {
+        return;
+      }
+      const data = JSON.stringify(e.model.get('item'));
+      e.dataTransfer.setData('arc/request-object', data);
+      e.dropEffect = 'copy';
+    }
+    /**
+     * Computes value for the `draggable` property of the list item.
+     * When `draggableEnabled` is set it returns true which is one of the
+     * conditions to enable drag and drop on an element.
+     * @param {Boolean} draggableEnabled Current value of `draggableEnabled`
+     * @return {String} `true` or `false` (as string) depending on the argument.
+     */
+    _computeDraggableValue(draggableEnabled) {
+      return draggableEnabled ? 'true' : 'false';
     }
   }
   window.customElements.define(HistoryMenu.is, HistoryMenu);

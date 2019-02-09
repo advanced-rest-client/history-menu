@@ -21,8 +21,30 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="Draggable">
+      <template>
+        <history-menu no-auto draggable-enabled></history-menu>
+      </template>
+    </test-fixture>
+
     <script>
-    /* global DataGenerator */
+    /* global DataGenerator, DataTransfer */
+
+    // DataTransfer polyfill
+    if (typeof DataTransfer === 'undefined') {
+      class DataTransfer {
+        setData(type, data) {
+          this._data[type] = data;
+        }
+        getData(type) {
+          if (!this._data) {
+            return null;
+          }
+          return this._data[type];
+        }
+      }
+      window.DataTransfer = DataTransfer;
+    }
 
     suite('History menu', () => {
       function dataFactory(e) {
@@ -197,6 +219,86 @@
             assert.equal(spy.args[0][0].detail.id, element.requests[0]._id);
             done();
           });
+        });
+      });
+
+      suite('_computeDraggableValue()', () => {
+        let element;
+        setup(function() {
+          element = fixture('Basic');
+        });
+
+        test('Returns "true" when draggableEnabled is set', () => {
+          const result = element._computeDraggableValue(true);
+          assert.equal(result, 'true');
+        });
+
+        test('Returns "false" when draggableEnabled is not set', () => {
+          const result = element._computeDraggableValue(false);
+          assert.equal(result, 'false');
+        });
+
+        test('Request item has dragging disabled by default', (done) => {
+          element.requests = [DataGenerator.generateSavedItem()];
+          flush(() => {
+            const node = element.shadowRoot.querySelector('paper-icon-item');
+            assert.equal(node.getAttribute('draggable'), 'false');
+            done();
+          });
+        });
+
+        test('Request item has dragging enabled', (done) => {
+          element.draggableEnabled = true;
+          element.requests = [DataGenerator.generateHistoryObject()];
+          flush(() => {
+            const node = element.shadowRoot.querySelector('paper-icon-item');
+            assert.equal(node.getAttribute('draggable'), 'true');
+            done();
+          });
+        });
+      });
+
+      suite('_dragStart()', () => {
+        let element;
+        setup(function(done) {
+          element = fixture('Draggable');
+          element.requests = DataGenerator.generateHistoryRequestsData({
+            requestsSize: 2
+          });
+          flush(() => done());
+        });
+
+        function dispatch(element) {
+          const node = element.shadowRoot.querySelector('paper-icon-item');
+          const e = new Event('dragstart');
+          e.dataTransfer = new DataTransfer();
+          node.dispatchEvent(e);
+        }
+
+        test('Calls _dragStart()', () => {
+          const spy = sinon.spy(element, '_dragStart');
+          dispatch(element);
+          assert.isTrue(spy.called);
+        });
+
+        test('Sets transfer data', () => {
+          const spy = sinon.spy(element, '_dragStart');
+          dispatch(element);
+          const data = spy.args[0][0].dataTransfer.getData('arc/request-object');
+          assert.typeOf(data, 'string');
+        });
+
+        test('Sets dropEffect', () => {
+          const spy = sinon.spy(element, '_dragStart');
+          dispatch(element);
+          assert.equal(spy.args[0][0].dropEffect, 'copy');
+        });
+
+        test('Ignores event when draggableEnabled not set', () => {
+          element.draggableEnabled = false;
+          const spy = sinon.spy(element, '_dragStart');
+          dispatch(element);
+          assert.isUndefined(spy.args[0][0].dropEffect);
         });
       });
     });

@@ -20,6 +20,7 @@
   <link rel="import" href="../../paper-listbox/paper-listbox.html">
   <link rel="import" href="../../http-method-selector/http-method-selector-mini.html">
   <link rel="import" href="../../paper-input/paper-input.html">
+  <link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
   <link rel="import" href="../../neon-animation/web-animations.html">
   <script src="../../chance/dist/chance.min.js"></script>
   <link rel="import" href="../history-menu.html">
@@ -48,6 +49,23 @@
       margin-top: 20px;
       margin-bottom: 20px;
     }
+
+    #dragOutput {
+      display: block;
+      padding: 8px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      background-color: #FFF8E1;
+    }
+
+    .drop-target {
+      border: 2px transparent dashed;
+      box-sizing: border-box;
+    }
+
+    .drop-target.drag-over {
+      border-color: #8BC34A;
+    }
     </style>
   </custom-style>
 </head>
@@ -56,8 +74,15 @@
     <template is="dom-bind">
       <request-model></request-model>
       <section class="centered card">
-        <history-menu id="menu" list-type="[[listType]]"></history-menu>
+        <history-menu id="menu" list-type="[[listType]]" draggable-enabled="[[draggableEnabled]]"></history-menu>
       </section>
+
+      <template is="dom-if" if="[[draggableEnabled]]">
+        <section class="centered card drop-target" on-dragover="_dragoverHandler" on-dragleave="_dragleaveHandler" on-drop="_dropHandler">
+          Drop request here
+          <output id="dragOutput" hidden></output>
+        </section>
+      </template>
 
       <section class="centered card">
         <h2>Options</h2>
@@ -67,6 +92,7 @@
         <paper-button on-click="changed">Inform first item changed</paper-button>
         <paper-button on-click="deleted">Inform first item deleted</paper-button>
         <paper-button on-click="addNew">Add new history item</paper-button>
+        <paper-toggle-button checked="{{draggableEnabled}}">Enable experimental item draggable</paper-toggle-button>
 
         <paper-dropdown-menu label="Select list type">
           <paper-listbox slot="dropdown-content" attr-for-selected="data-value" selected="{{listType}}">
@@ -192,6 +218,30 @@
         bubbles: true
       });
       document.body.dispatchEvent(e);
+    };
+
+    scope._dragoverHandler = function(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'link';
+      e.currentTarget.classList.add('drag-over');
+    };
+
+    scope._dragleaveHandler = function(e) {
+      e.currentTarget.classList.remove('drag-over');
+    };
+
+    scope._dropHandler = function(e) {
+      e.preventDefault();
+      const data = e.dataTransfer.getData('arc/request-object');
+      // format data
+      const request = JSON.parse(data);
+      console.log(request);
+      const out = document.getElementById('dragOutput');
+      out.innerText = JSON.stringify(request, null, 2);
+      if (out.hasAttribute('hidden')) {
+        out.removeAttribute('hidden');
+      }
+      e.currentTarget.classList.remove('drag-over');
     };
     /* global DataGenerator */
     window.addEventListener('navigate', function() {

@@ -153,7 +153,7 @@
         {
           "name": "project",
           "type": "Object | null | undefined",
-          "description": "A project object associated with requests.\nThis is only valid when `type` is project. It is set automatically\nwhen `readProjectRequests()` is called.",
+          "description": "A project object associated with requests.\nThis is only valid when `type` is set to `project`. It is set automatically\nwhen `readProjectRequests()` is called.",
           "privacy": "public",
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
@@ -394,11 +394,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 178,
+              "line": 172,
               "column": 8
             },
             "end": {
-              "line": 178,
+              "line": 172,
               "column": 28
             }
           },
@@ -407,6 +407,28 @@
               "attributeType": "String"
             }
           }
+        },
+        {
+          "name": "draggableEnabled",
+          "type": "boolean | null | undefined",
+          "description": "Adds draggable property to the request list item element.\nThe `dataTransfer` object has `arc/request-object` mime type with\nserialized JSON with request model.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 178,
+              "column": 8
+            },
+            "end": {
+              "line": 178,
+              "column": 55
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
         }
       ],
       "methods": [
@@ -420,7 +442,7 @@
               "column": 4
             },
             "end": {
-              "line": 190,
+              "line": 191,
               "column": 5
             }
           },
@@ -436,11 +458,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 192,
+              "line": 193,
               "column": 4
             },
             "end": {
-              "line": 195,
+              "line": 196,
               "column": 5
             }
           },
@@ -457,11 +479,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 128,
+              "line": 129,
               "column": 4
             },
             "end": {
-              "line": 137,
+              "line": 141,
               "column": 5
             }
           },
@@ -476,6 +498,11 @@
               "name": "detail",
               "type": "?any",
               "description": "A detail to set"
+            },
+            {
+              "name": "cancelable",
+              "type": "?Boolean",
+              "description": "True if the event is cancelable (default value)."
             }
           ],
           "return": {
@@ -490,11 +517,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 144,
+              "line": 147,
               "column": 4
             },
             "end": {
-              "line": 158,
+              "line": 161,
               "column": 5
             }
           },
@@ -517,11 +544,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 163,
+              "line": 166,
               "column": 4
             },
             "end": {
-              "line": 171,
+              "line": 174,
               "column": 5
             }
           },
@@ -545,11 +572,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 176,
+              "line": 179,
               "column": 4
             },
             "end": {
-              "line": 191,
+              "line": 194,
               "column": 5
             }
           },
@@ -573,11 +600,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 198,
+              "line": 201,
               "column": 4
             },
             "end": {
-              "line": 216,
+              "line": 219,
               "column": 5
             }
           },
@@ -600,11 +627,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 221,
+              "line": 224,
               "column": 4
             },
             "end": {
-              "line": 246,
+              "line": 249,
               "column": 5
             }
           },
@@ -628,11 +655,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 253,
+              "line": 256,
               "column": 4
             },
             "end": {
-              "line": 264,
+              "line": 267,
               "column": 5
             }
           },
@@ -655,11 +682,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 269,
+              "line": 272,
               "column": 4
             },
             "end": {
-              "line": 289,
+              "line": 292,
               "column": 5
             }
           },
@@ -683,11 +710,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 295,
+              "line": 298,
               "column": 4
             },
             "end": {
-              "line": 299,
+              "line": 302,
               "column": 5
             }
           },
@@ -712,11 +739,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 305,
+              "line": 308,
               "column": 4
             },
             "end": {
-              "line": 309,
+              "line": 312,
               "column": 5
             }
           },
@@ -741,11 +768,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 317,
+              "line": 320,
               "column": 4
             },
             "end": {
-              "line": 322,
+              "line": 325,
               "column": 5
             }
           },
@@ -775,11 +802,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 328,
+              "line": 331,
               "column": 4
             },
             "end": {
-              "line": 361,
+              "line": 364,
               "column": 5
             }
           },
@@ -804,11 +831,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 370,
+              "line": 373,
               "column": 4
             },
             "end": {
-              "line": 384,
+              "line": 387,
               "column": 5
             }
           },
@@ -835,11 +862,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 391,
+              "line": 394,
               "column": 4
             },
             "end": {
-              "line": 394,
+              "line": 397,
               "column": 5
             }
           },
@@ -864,11 +891,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 400,
+              "line": 403,
               "column": 4
             },
             "end": {
-              "line": 419,
+              "line": 420,
               "column": 5
             }
           },
@@ -893,11 +920,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 421,
+              "line": 422,
               "column": 4
             },
             "end": {
-              "line": 423,
+              "line": 424,
               "column": 5
             }
           },
@@ -916,11 +943,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 429,
+              "line": 430,
               "column": 4
             },
             "end": {
-              "line": 434,
+              "line": 435,
               "column": 5
             }
           },
@@ -944,11 +971,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 440,
+              "line": 441,
               "column": 4
             },
             "end": {
-              "line": 458,
+              "line": 449,
               "column": 5
             }
           },
@@ -965,17 +992,50 @@
           "inheritedFrom": "ArcComponents.RequestsListMixin"
         },
         {
+          "name": "_applyListStyles",
+          "description": "Applies `--paper-item-icon-width` variable.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../requests-list-mixin/requests-list-mixin.html",
+            "start": {
+              "line": 455,
+              "column": 4
+            },
+            "end": {
+              "line": 468,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "size",
+              "type": "Number",
+              "description": "Icon width in pixels."
+            },
+            {
+              "name": "target",
+              "type": "?Element",
+              "description": "The target to apply styling. Default to this."
+            }
+          ],
+          "return": {
+            "type": "void"
+          },
+          "inheritedFrom": "ArcComponents.RequestsListMixin"
+        },
+        {
           "name": "_persistRequestsOrder",
           "description": "Stores current order of requests in the project.\nThis shouls be only called wshen `project` property is set.",
           "privacy": "protected",
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 464,
+              "line": 474,
               "column": 4
             },
             "end": {
-              "line": 477,
+              "line": 487,
               "column": 5
             }
           },
@@ -993,11 +1053,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 484,
+              "line": 494,
               "column": 4
             },
             "end": {
-              "line": 500,
+              "line": 510,
               "column": 5
             }
           },
@@ -1027,11 +1087,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 508,
+              "line": 518,
               "column": 4
             },
             "end": {
-              "line": 516,
+              "line": 526,
               "column": 5
             }
           },
@@ -1055,11 +1115,11 @@
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
-              "line": 522,
+              "line": 533,
               "column": 4
             },
             "end": {
-              "line": 532,
+              "line": 544,
               "column": 5
             }
           },
@@ -1068,6 +1128,96 @@
             {
               "name": "e",
               "type": "CustomEvent"
+            }
+          ],
+          "return": {
+            "type": "Boolean",
+            "desc": "False if the event was not handled."
+          },
+          "inheritedFrom": "ArcComponents.RequestsListMixin"
+        },
+        {
+          "name": "_dispatchExportData",
+          "description": "Dispatches `export-data` event and returns it.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../requests-list-mixin/requests-list-mixin.html",
+            "start": {
+              "line": 552,
+              "column": 4
+            },
+            "end": {
+              "line": 568,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "requests",
+              "type": "Array.<Object>",
+              "description": "List of request to export."
+            },
+            {
+              "name": "opts",
+              "type": "Object"
+            }
+          ],
+          "return": {
+            "type": "CustomEvent"
+          },
+          "inheritedFrom": "ArcComponents.RequestsListMixin"
+        },
+        {
+          "name": "_openRequest",
+          "description": "Dispatches navigate event to open a request",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../requests-list-mixin/requests-list-mixin.html",
+            "start": {
+              "line": 574,
+              "column": 4
+            },
+            "end": {
+              "line": 585,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "id",
+              "type": "[type]",
+              "description": "[description]"
+            }
+          ],
+          "return": {
+            "type": "[type]",
+            "desc": "[description]"
+          },
+          "inheritedFrom": "ArcComponents.RequestsListMixin"
+        },
+        {
+          "name": "_validateType",
+          "description": "Throws an error when type is not set.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../requests-list-mixin/requests-list-mixin.html",
+            "start": {
+              "line": 590,
+              "column": 4
+            },
+            "end": {
+              "line": 594,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "type",
+              "type": "String",
+              "description": "Passed to the function type"
             }
           ],
           "return": {
@@ -1676,7 +1826,7 @@
               "column": 6
             },
             "end": {
-              "line": 528,
+              "line": 527,
               "column": 7
             }
           },
@@ -1700,11 +1850,11 @@
           "sourceRange": {
             "file": "../history-list-mixin/history-list-mixin.html",
             "start": {
-              "line": 536,
+              "line": 535,
               "column": 6
             },
             "end": {
-              "line": 556,
+              "line": 555,
               "column": 7
             }
           },
@@ -1729,11 +1879,11 @@
           "sourceRange": {
             "file": "../history-list-mixin/history-list-mixin.html",
             "start": {
-              "line": 563,
+              "line": 562,
               "column": 6
             },
             "end": {
-              "line": 579,
+              "line": 578,
               "column": 7
             }
           },
@@ -1767,11 +1917,11 @@
           "sourceRange": {
             "file": "../history-list-mixin/history-list-mixin.html",
             "start": {
-              "line": 586,
+              "line": 585,
               "column": 6
             },
             "end": {
-              "line": 593,
+              "line": 592,
               "column": 7
             }
           },
@@ -1795,11 +1945,11 @@
           "sourceRange": {
             "file": "../history-list-mixin/history-list-mixin.html",
             "start": {
-              "line": 603,
+              "line": 602,
               "column": 6
             },
             "end": {
-              "line": 630,
+              "line": 629,
               "column": 7
             }
           },
@@ -1824,11 +1974,11 @@
           "sourceRange": {
             "file": "../history-list-mixin/history-list-mixin.html",
             "start": {
-              "line": 638,
+              "line": 637,
               "column": 6
             },
             "end": {
-              "line": 650,
+              "line": 649,
               "column": 7
             }
           },
@@ -1851,11 +2001,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 202,
+              "line": 203,
               "column": 4
             },
             "end": {
-              "line": 207,
+              "line": 208,
               "column": 5
             }
           },
@@ -1880,11 +2030,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 213,
+              "line": 214,
               "column": 4
             },
             "end": {
-              "line": 222,
+              "line": 223,
               "column": 5
             }
           },
@@ -1900,11 +2050,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 228,
+              "line": 229,
               "column": 4
             },
             "end": {
-              "line": 230,
+              "line": 231,
               "column": 5
             }
           },
@@ -1920,11 +2070,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 235,
+              "line": 236,
               "column": 4
             },
             "end": {
-              "line": 246,
+              "line": 239,
               "column": 5
             }
           },
@@ -1938,6 +2088,58 @@
           "return": {
             "type": "void"
           }
+        },
+        {
+          "name": "_dragStart",
+          "description": "Handler for the `dragstart` event added to the list item when `draggableEnabled`\nis set to true.\nThis function sets request data on the `dataTransfer` object with `arc/request-object`\nmime type. The request data is a serialized JSON with request model.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 247,
+              "column": 4
+            },
+            "end": {
+              "line": 254,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e",
+              "type": "Event"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_computeDraggableValue",
+          "description": "Computes value for the `draggable` property of the list item.\nWhen `draggableEnabled` is set it returns true which is one of the\nconditions to enable drag and drop on an element.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 262,
+              "column": 4
+            },
+            "end": {
+              "line": 264,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "draggableEnabled",
+              "type": "Boolean",
+              "description": "Current value of `draggableEnabled`"
+            }
+          ],
+          "return": {
+            "type": "String",
+            "desc": "`true` or `false` (as string) depending on the argument."
+          }
         }
       ],
       "staticMethods": [],
@@ -1950,11 +2152,11 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 172,
+          "line": 166,
           "column": 2
         },
         "end": {
-          "line": 247,
+          "line": 265,
           "column": 3
         }
       },
@@ -2054,7 +2256,7 @@
         },
         {
           "name": "project",
-          "description": "A project object associated with requests.\nThis is only valid when `type` is project. It is set automatically\nwhen `readProjectRequests()` is called.",
+          "description": "A project object associated with requests.\nThis is only valid when `type` is set to `project`. It is set automatically\nwhen `readProjectRequests()` is called.",
           "sourceRange": {
             "file": "../requests-list-mixin/requests-list-mixin.html",
             "start": {
@@ -2201,16 +2403,32 @@
           "description": "Database ID of the selected item.",
           "sourceRange": {
             "start": {
-              "line": 178,
+              "line": 172,
               "column": 8
             },
             "end": {
-              "line": 178,
+              "line": 172,
               "column": 28
             }
           },
           "metadata": {},
           "type": "string | null | undefined"
+        },
+        {
+          "name": "draggable-enabled",
+          "description": "Adds draggable property to the request list item element.\nThe `dataTransfer` object has `arc/request-object` mime type with\nserialized JSON with request model.",
+          "sourceRange": {
+            "start": {
+              "line": 178,
+              "column": 8
+            },
+            "end": {
+              "line": 178,
+              "column": 55
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
         }
       ],
       "events": [
