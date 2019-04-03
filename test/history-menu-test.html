@@ -33,6 +33,7 @@
     <script type="module">
     import {DataGenerator} from '../../../@advanced-rest-client/arc-data-generator/arc-data-generator.js';
     import sinon from '../../../sinon/pkg/sinon-esm.js';
+    import {afterNextRender} from '../../../@polymer/polymer/lib/utils/render-status.js';
     import '../history-menu.js';
     /* global DataTransfer */
 
@@ -271,8 +272,13 @@
           element.requests = DataGenerator.generateHistoryRequestsData({
             requestsSize: 2
           });
-          setTimeout(() => {
-            flush(() => done());
+          // next frame by history-list-mixin
+          afterNextRender(element, () => {
+            // database query
+            setTimeout(() => {
+              // Polymer stamp
+              flush(() => done());
+            });
           });
         });
 
