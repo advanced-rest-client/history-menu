@@ -1,22 +1,44 @@
 {
-  "name": "@advanced-rest-client/history-menu",
-  "version": "2.0.3",
-  "license": "Apache-2.0",
   "description": "A list of history items in the ARC main menu",
-  "devDependencies": {
-    "@polymer/gen-typescript-declarations": "^1.6.1"
+  "keywords": [
+    "web-components",
+    "polymer"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/advanced-rest-client/history-menu.git"
   },
-  "private": false,
-  "main": "history-menu.html",
+  "name": "@advanced-rest-client/history-menu",
+  "version": "3.0.0-preview.1",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@advanced-rest-client/arc-data-generator": "^3.0.0-preview.1",
+    "@advanced-rest-client/arc-models": "^3.0.0-preview.3",
+    "@advanced-rest-client/http-method-selector": "^3.0.0-preview.1",
+    "@polymer/gen-typescript-declarations": "^1.6.1",
+    "@polymer/iron-component-page": "^4.0.0",
+    "@polymer/iron-demo-helpers": "^3.0.0",
+    "@polymer/iron-test-helpers": "^3.0.0",
+    "@polymer/paper-button": "^3.0.0",
+    "@polymer/paper-dropdown-menu": "^3.0.0",
+    "@polymer/paper-input": "^3.0.0",
+    "@polymer/paper-listbox": "^3.0.0",
+    "@polymer/paper-toast": "^3.0.0",
+    "@polymer/paper-toggle-button": "^3.0.0",
+    "@polymer/test-fixture": "^4.0.2",
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "sinon": "^7.2.3",
+    "wct-mocha": "^1.0.0",
+    "web-animations-js": "^2.3.1"
+  },
+  "main": "history-menu.js",
   "scripts": {
     "lint": "polymer lint history-menu.html",
     "test-sauce": "polymer test --plugin sauce --job-name \"history-menu:local-test\"",
     "test": "polymer test --plugin local",
     "update-types": "gen-typescript-declarations --deleteExisting --outDir ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/advanced-rest-client/history-menu.git"
   },
   "bugs": {
     "url": "https://github.com/advanced-rest-client/history-menu/issues",
@@ -25,5 +47,19 @@
   "authors": [
     "Pawel Psztyc",
     "The Advanced REST client authors <arc@mulesoft.com>"
-  ]
+  ],
+  "contributors": [
+    "Pawel Psztyc",
+    "The Advanced REST client authors <arc@mulesoft.com>"
+  ],
+  "dependencies": {
+    "@advanced-rest-client/history-list-mixin": "^3.0.0-preview.1",
+    "@advanced-rest-client/requests-list-mixin": "^3.0.0-preview.1",
+    "@api-components/http-method-label": "^3.0.0-preview.2",
+    "@polymer/iron-list": "^3.0.0",
+    "@polymer/paper-item": "^3.0.0",
+    "@polymer/paper-progress": "^3.0.0",
+    "@polymer/paper-ripple": "^3.0.0",
+    "@polymer/polymer": "^3.2.0"
+  }
 }
