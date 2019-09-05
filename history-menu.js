@@ -11,17 +11,14 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import {PolymerElement} from '../../@polymer/polymer/polymer-element.js';
-import {html} from '../../@polymer/polymer/lib/utils/html-tag.js';
-import '../../@polymer/paper-item/paper-icon-item.js';
-import '../../@polymer/paper-item/paper-item-body.js';
-import '../../@polymer/paper-ripple/paper-ripple.js';
-import '../../@polymer/paper-progress/paper-progress.js';
-import '../../@polymer/iron-list/iron-list.js';
-import '../../@api-components/http-method-label/http-method-label.js';
-import {HistoryListMixin} from '../../@advanced-rest-client/history-list-mixin/history-list-mixin.js';
-import {RequestsListMixin} from '../../@advanced-rest-client/requests-list-mixin/requests-list-mixin.js';
-import '../../@advanced-rest-client/requests-list-mixin/requests-list-styles.js';
+import { LitElement, html, css } from 'lit-element';
+import { HistoryListMixin } from '@advanced-rest-client/history-list-mixin/history-list-mixin.js';
+import { RequestsListMixin } from '@advanced-rest-client/requests-list-mixin/requests-list-mixin.js';
+import styles from '@advanced-rest-client/requests-list-mixin/requests-list-styles.js';
+import '@anypoint-web-components/anypoint-item/anypoint-icon-item.js';
+import '@anypoint-web-components/anypoint-item/anypoint-item-body.js';
+import '@polymer/paper-progress/paper-progress.js';
+import '@api-components/http-method-label/http-method-label.js';
 /**
  * A list of history requests in the ARC main menu.
  *
@@ -64,122 +61,142 @@ import '../../@advanced-rest-client/requests-list-mixin/requests-list-styles.js'
  * `--arc-menu-empty-info-color` | Color applied to the empty info section | ``
  * `--arc-menu-empty-info-title-color` | Color applied to the title in the empty info section | ``
  *
- * @polymer
  * @customElement
  * @memberof UiElements
  * @demo demo/index.html
  * @appliesMixin RequestsListMixin
  * @appliesMixin HistoryListMixin
  */
-class HistoryMenu extends HistoryListMixin(RequestsListMixin(PolymerElement)) {
-  static get template() {
-    return html`<style include="requests-list-styles">
-    :host {
-      display: block;
-      background-color: var(--history-menu-background-color, inherit);
-      position: relative;
-      flex: 1;
-      flex-basis: 0.000000001px;
-      display: flex;
-      flex-direction: column;
-    }
+class HistoryMenu extends HistoryListMixin(RequestsListMixin(LitElement)) {
+  static get styles() {
+    return [
+      styles,
+      css`:host {
+        display: block;
+        background-color: var(--history-menu-background-color, inherit);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+      }
 
-    iron-list {
-      flex: 1 1 auto;
-    }
+      .list {
+        overflow: auto;
+      }
 
-    .url {
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      font-size: 14px;
-    }
+      .url {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: 14px;
+      }
 
-    paper-progress {
-      width: calc(100% - 32px);
-      margin: 0 16px;
-      position: absolute;
-    }
+      paper-progress {
+        width: calc(100% - 32px);
+        margin: 0 16px;
+        position: absolute;
+      }
 
-    .empty-info {
-      font-size: var(--arc-font-body1-font-size);
-      font-weight: var(--arc-font-body1-font-weight);
-      line-height: var(--arc-font-body1-line-height);
-      font-style: italic;
-      margin: 1em 16px;
-      color: var(--arc-menu-empty-info-color);
-    }
+      .empty-info {
+        font-size: var(--arc-font-body1-font-size);
+        font-weight: var(--arc-font-body1-font-weight);
+        line-height: var(--arc-font-body1-line-height);
+        font-style: italic;
+        margin: 1em 16px;
+        color: var(--arc-menu-empty-info-color);
+      }
 
-    .empty-title {
-      white-space: var(--arc-font-nowrap-white-space);
-      overflow: var(--arc-font-nowrap-overflow);
-      text-overflow: var(--arc-font-nowrap-text-overflow);
-      font-size: var(--arc-font-title-font-size);
-      font-weight: var(--arc-font-title-font-weight);
-      line-height: var(--arc-font-title-line-height);
-      white-space: normal;
-      color: var(--arc-menu-empty-info-title-color);
-    }
+      .empty-title {
+        white-space: var(--arc-font-nowrap-white-space);
+        overflow: var(--arc-font-nowrap-overflow);
+        text-overflow: var(--arc-font-nowrap-text-overflow);
+        font-size: var(--arc-font-title-font-size);
+        font-weight: var(--arc-font-title-font-weight);
+        line-height: var(--arc-font-title-line-height);
+        white-space: normal;
+        color: var(--arc-menu-empty-info-title-color);
+      }
 
-    .empty-message {
-      flex: 1;
-      flex-basis: 0.000000001px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
+      .empty-message {
+        flex: 1;
+        flex-basis: 0.000000001px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
 
-    .empty-state-image {
-      width: 180px;
-      height: 120px;
-    }
+      .empty-state-image {
+        width: 180px;
+        height: 120px;
+      }
 
-    [hidden] {
-      display: none !important;
-    }
-    </style>
-    <paper-progress hidden\$="[[!querying]]" indeterminate=""></paper-progress>
-    <template is="dom-if" if="[[dataUnavailable]]">
-      <div class="empty-message">
-        <h3 class="empty-title">Send a request and recall it from here</h3>
-        <p class="empty-info">Once you made a request it will appear in this place.</p>
-      </div>
-    </template>
-    <iron-list items="[[requests]]" id="list" hidden\$="[[!hasRequests]]">
-      <template>
-        <div data-index\$="[[index]]" title\$="[[item.url]]" class\$="[[_computeItemClass(item._id, selectedItem)]]">
-          <template is="dom-if" if="[[item.hasHeader]]">
-            <div class="history-group-header">[[item.header]]</div>
-          </template>
-          <paper-icon-item
-            on-click="_openHistory"
-            class="request-list-item"
-            draggable\$="[[_computeDraggableValue(draggableEnabled)]]"
-            on-dragstart="_dragStart">
-            <http-method-label method="[[item.method]]" slot="item-icon"></http-method-label>
-            <paper-item-body two-line\$="[[_hasTwoLines]]">
-              <div class="url">[[item.url]]</div>
-              <div secondary="">[[item.timeLabel]]</div>
-              <paper-ripple></paper-ripple>
-            </paper-item-body>
-          </paper-icon-item>
-        </div>
-      </template>
-    </iron-list>`;
+      [hidden] {
+        display: none !important;
+      }`
+    ];
   }
+
+  _unavailableTemplate() {
+    return html`<div class="empty-message">
+      <h3 class="empty-title">Send a request and recall it from here</h3>
+      <p class="empty-info">Once you made a request it will appear in this place.</p>
+    </div>`;
+  }
+
+  _listTemplate() {
+    const items = this.requests || [];
+    const { selectedItem, draggableEnabled, _hasTwoLines } = this;
+    return items.map((item, index) => html`<div
+      data-index="${index}"
+      title="${item.url}"
+      class="${item._id === selectedItem ? 'selected' : ''}">
+      ${item.hasHeader ? html`<div class="history-group-header">${item.header}</div>` : ''}
+      <anypoint-icon-item
+        data-index="${index}"
+        @click="${this._openHistory}"
+        class="request-list-item"
+        draggable="${draggableEnabled ? 'true' : 'false'}"
+        @dragstart="${this._dragStart}">
+        <http-method-label
+          .method="${item.method}" slot="item-icon"></http-method-label>
+        <anypoint-item-body ?twoline="${_hasTwoLines}">
+          <div class="url">${item.url}</div>
+          <div secondary="">${item.timeLabel}</div>
+        </anypoint-item-body>
+      </anypoint-icon-item>
+    </div>`);
+  }
+
+  render() {
+    const { dataUnavailable, hasRequests, querying } = this;
+    return html`
+    ${this.modelTemplate}
+    <paper-progress ?hidden="${!querying}" indeterminate></paper-progress>
+    ${dataUnavailable ? this._unavailableTemplate() : ''}
+    <div class="list">
+      ${hasRequests ? this._listTemplate() : ''}
+    </div>`;
+  }
+
   static get properties() {
     return {
       // Database ID of the selected item.
-      selectedItem: String,
+      selectedItem: { type: String },
       /**
        * Adds draggable property to the request list item element.
        * The `dataTransfer` object has `arc/request-object` mime type with
        * serialized JSON with request model.
        */
-      draggableEnabled: {type: Boolean, value: false}
+      draggableEnabled: { type: Boolean }
     };
+  }
+
+  get _list() {
+    if (!this.__list) {
+      this.__list = this.shadowRoot.querySelector('.list');
+    }
+    return this.__list;
   }
 
   constructor() {
@@ -188,26 +205,30 @@ class HistoryMenu extends HistoryListMixin(RequestsListMixin(PolymerElement)) {
   }
 
   connectedCallback() {
-    super.connectedCallback();
+    if (super.connectedCallback) {
+      super.connectedCallback();
+    }
     this.type = 'history';
-    this.$.list.addEventListener('scroll', this._scrollHandler);
+    this._addScrollEvent();
   }
 
   disconnectedCallback() {
-    this.$.list.removeEventListener('scroll', this._scrollHandler);
-    super.disconnectedCallback();
-  }
-  /**
-   * Computes class name for the HTML element representing a history item.
-   * @param {String} id
-   * @param {String} selectedItem
-   * @return {String}
-   */
-  _computeItemClass(id, selectedItem) {
-    if (id && id === selectedItem) {
-      return 'iron-selected';
+    if (super.disconnectedCallback) {
+      super.disconnectedCallback();
     }
-    return '';
+    this._list.removeEventListener('scroll', this._scrollHandler);
+  }
+
+  firstUpdated() {
+    this._addScrollEvent();
+  }
+
+  _addScrollEvent() {
+    const list = this._list;
+    if (!list) {
+      return;
+    }
+    list.addEventListener('scroll', this._scrollHandler);
   }
   /**
    * Called every time the element changed it's scroll position. It will call the `makeQuery`
@@ -218,26 +239,20 @@ class HistoryMenu extends HistoryListMixin(RequestsListMixin(PolymerElement)) {
     if (this.querying) {
       return;
     }
-    const elm = this.$.list;
+    const elm = this._list;
     const delta = elm.scrollHeight - (elm.scrollTop + elm.offsetHeight);
     if (delta < 120) {
       this.loadNext();
     }
   }
   /**
-   * Notifies the list that the resize event occurred.
-   * Should be called whhen content of the list changed but the list wasn't
-   * visible at the time.
-   */
-  notifyResize() {
-    this.$.list.notifyResize();
-  }
-  /**
    * Handler for the `click` event on the item.
    * @param {ClickEvent} e
    */
   _openHistory(e) {
-    const id = e.model.get('item._id');
+    const index = Number(e.currentTarget.dataset.index);
+    const request = this.requests[index];
+    const id = request._id;
     this._openRequest(id);
   }
   /**
@@ -251,22 +266,13 @@ class HistoryMenu extends HistoryListMixin(RequestsListMixin(PolymerElement)) {
     if (!this.draggableEnabled) {
       return;
     }
-    const request = e.model.get('item');
+    const index = Number(e.currentTarget.dataset.index);
+    const request = this.requests[index];
     const data = JSON.stringify(request);
     e.dataTransfer.setData('arc/request-object', data);
     e.dataTransfer.setData('arc/history-request', request._id);
     e.dataTransfer.setData('arc-source/history-menu', request._id);
     e.dataTransfer.effectAllowed = 'copy';
-  }
-  /**
-   * Computes value for the `draggable` property of the list item.
-   * When `draggableEnabled` is set it returns true which is one of the
-   * conditions to enable drag and drop on an element.
-   * @param {Boolean} draggableEnabled Current value of `draggableEnabled`
-   * @return {String} `true` or `false` (as string) depending on the argument.
-   */
-  _computeDraggableValue(draggableEnabled) {
-    return draggableEnabled ? 'true' : 'false';
   }
 }
 window.customElements.define('history-menu', HistoryMenu);

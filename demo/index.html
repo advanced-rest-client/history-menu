@@ -1,251 +1,54 @@
-<!DOCTYPE html><html><head>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>history-menu demo</title>
-  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script src="../../../web-animations-js/web-animations-next.min.js"></script>
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+  <title>ARC history menu demo</title>
+  <script src="../node_modules/web-animations-js/web-animations-next.min.js"></script>
 
-  <script type="module" src="../../../@polymer/polymer/lib/elements/dom-bind.js"></script>
-  <script type="module" src="../../../@webcomponents/shadycss/entrypoints/apply-shim.js"></script>
-  <script type="module" src="../../../@polymer/polymer/lib/elements/custom-style.js"></script>
-  <script type="module" src="../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
-  <script type="module" src="../../../@polymer/paper-toast/paper-toast.js"></script>
-  <script type="module" src="../../../@advanced-rest-client/arc-models/request-model.js"></script>
-  <script type="module" src="../../../@polymer/paper-dropdown-menu/paper-dropdown-menu.js"></script>
-  <script type="module" src="../../../@polymer/paper-item/paper-item.js"></script>
-  <script type="module" src="../../../@polymer/paper-button/paper-button.js"></script>
-  <script type="module" src="../../../@polymer/paper-listbox/paper-listbox.js"></script>
-  <script type="module" src="../../../@advanced-rest-client/http-method-selector/http-method-selector-mini.js"></script>
-  <script type="module" src="../../../@polymer/paper-input/paper-input.js"></script>
-  <script type="module" src="../../../@polymer/paper-toggle-button/paper-toggle-button.js"></script>
-  <script src="../../../chance/dist/chance.min.js"></script>
-  <script type="module" src="../history-menu.js"></script>
+  <style>
+  .centered[role="main"] {
+    max-width: 1400px;
+  }
 
-  <custom-style>
-    <style is="custom-style" include="demo-pages-shared-styles">
-    html,
-    body {
-      background-color: #e5e5e5;
-      margin: 0;
-      padding: 0;
-    }
+  history-menu {
+    height: 500px;
+    width: 300px;
+  }
 
-    history-menu {
-      height: 600px;
-    }
+  #dragOutput {
+    display: block;
+    padding: 8px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    background-color: #FFF8E1;
+  }
 
-    h2 {
-      @apply --paper-font-headline;
-    }
+  .drop-target {
+    border: 2px transparent dashed;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 20px;
+    border: 1px #e5e5e5 solid;
+  }
 
-    .card {
-      @apply --shadow-elevation-4dp;
-      padding: 20px;
-      box-sizing: border-box;
-      background-color: #fff;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
+  .drop-target.drag-over {
+    border-color: #8BC34A;
+  }
 
-    #dragOutput {
-      display: block;
-      padding: 8px;
-      white-space: pre-wrap;
-      word-break: break-all;
-      background-color: #FFF8E1;
-    }
-
-    .drop-target {
-      border: 2px transparent dashed;
-      box-sizing: border-box;
-    }
-
-    .drop-target.drag-over {
-      border-color: #8BC34A;
-    }
-    </style>
-  </custom-style>
+  output {
+    display: block;
+    text-align: left;
+    white-space: pre-wrap;
+  }
+  </style>
 </head>
-<body unresolved="">
-  <dom-bind id="demo">
-    <template is="dom-bind">
-      <request-model></request-model>
-      <section class="centered card">
-        <history-menu id="hmenu" list-type="[[listType]]" draggable-enabled="[[draggableEnabled]]"></history-menu>
-      </section>
 
-      <template is="dom-if" if="[[draggableEnabled]]">
-        <section class="centered card drop-target" on-dragover="_dragoverHandler" on-dragleave="_dragleaveHandler" on-drop="_dropHandler">
-          Drop request here
-          <output id="dragOutput" hidden=""></output>
-        </section>
-      </template>
-
-      <section class="centered card">
-        <h2>Options</h2>
-        <paper-button on-click="generate">Generate 100 requests</paper-button>
-        <paper-button on-click="delete">Clear list</paper-button>
-        <paper-button on-click="refresh">Refresh list</paper-button>
-        <paper-button on-click="changed">Inform first item changed</paper-button>
-        <paper-button on-click="deleted">Inform first item deleted</paper-button>
-        <paper-button on-click="addNew">Add new history item</paper-button>
-        <paper-toggle-button checked="{{draggableEnabled}}">Enable experimental item draggable</paper-toggle-button>
-
-        <paper-dropdown-menu label="Select list type">
-          <paper-listbox slot="dropdown-content" attr-for-selected="data-value" selected="{{listType}}">
-            <paper-item data-value="default">Default</paper-item>
-            <paper-item data-value="comfortable">Comfortable</paper-item>
-            <paper-item data-value="compact">Compact</paper-item>
-          </paper-listbox>
-        </paper-dropdown-menu>
-      </section>
-
-      <section class="centered card">
-        <h2>Add request</h2>
-        <div>
-          <http-method-selector-mini method="{{request.method}}"></http-method-selector-mini>
-          <paper-input label="URL" value="{{request.url}}"></paper-input>
-        </div>
-        <div>
-          <paper-input label="Request time" type="datetime-local" value="{{request.created}}"></paper-input>
-        </div>
-        <div>
-          <paper-input label="History id" value="{{request._id}}"></paper-input>
-        </div>
-        <paper-button on-click="addRequest">Add</paper-button>
-      </section>
-
-
-      <paper-toast id="genToast" text="The request data has been generated"></paper-toast>
-      <paper-toast id="delToast" text="The request data has been removed"></paper-toast>
-      <paper-toast id="navToast" text="Navigation ocurred"></paper-toast>
-    </template>
-  </dom-bind>
-  <script type="module">
-  import {DataGenerator} from '../../../@advanced-rest-client/arc-data-generator/arc-data-generator.js';
-  (function(scope) {
-    const now = new Date();
-    now.setTime(now.getTime() - now.getTimezoneOffset() * 60 * 1000);
-    scope.request = {
-      _id: 'test-id',
-      method: 'GET',
-      url: 'https://api.domain.com',
-      type: 'history',
-      created: now.toISOString().substr(0, 16)
-    };
-    scope.refresh = function() {
-      document.querySelector('history-menu').refresh();
-    };
-
-    scope.generate = function() {
-      DataGenerator.insertHistoryRequestData({
-        requestsSize: 100
-      })
-      .then(() => {
-        document.getElementById('genToast').opened = true;
-        let e = new CustomEvent('data-imported', {
-          bubbles: true
-        });
-        document.body.dispatchEvent(e);
-      });
-    };
-
-    scope.delete = function() {
-      DataGenerator.destroyHistoryData()
-      .then(() => {
-        document.getElementById('delToast').opened = true;
-        const e = new CustomEvent('datastore-destroyed', {
-          detail: {
-            datastore: 'all'
-          },
-          bubbles: true
-        });
-        document.body.dispatchEvent(e);
-      });
-    };
-
-    scope.changed = function() {
-      let item = document.getElementById('hmenu').requests[0];
-      item = Object.assign({}, item);
-      item.updated = Date.now();
-      const e = new CustomEvent('request-object-changed', {
-        detail: {
-          request: item,
-          type: 'history'
-        },
-        bubbles: true
-      });
-      document.body.dispatchEvent(e);
-    };
-
-    scope.deleted = function() {
-      const item = document.getElementById('hmenu').requests[0];
-      const e = new CustomEvent('request-object-deleted', {
-        detail: {
-          oldRev: item._rev,
-          id: item._id,
-          type: 'history'
-        },
-        bubbles: true
-      });
-      document.body.dispatchEvent(e);
-    };
-
-    scope.addNew = () => {
-      const item = DataGenerator.generateHistoryObject();
-      item.update = Date.now();
-      const e = new CustomEvent('request-object-changed', {
-        detail: {
-          request: item,
-          type: 'history'
-        },
-        bubbles: true
-      });
-      document.body.dispatchEvent(e);
-    };
-
-    scope.addRequest = () => {
-      const request = Object.assign({}, scope.request);
-      const d = new Date(request.created);
-      request.created = d.getTime();
-      const e = new CustomEvent('request-object-changed', {
-        detail: {
-          request,
-          type: 'history'
-        },
-        bubbles: true
-      });
-      document.body.dispatchEvent(e);
-    };
-
-    scope._dragoverHandler = function(e) {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'link';
-      e.currentTarget.classList.add('drag-over');
-    };
-
-    scope._dragleaveHandler = function(e) {
-      e.currentTarget.classList.remove('drag-over');
-    };
-
-    scope._dropHandler = function(e) {
-      e.preventDefault();
-      const data = e.dataTransfer.getData('arc/request-object');
-      // format data
-      const request = JSON.parse(data);
-      console.log(request);
-      const out = document.getElementById('dragOutput');
-      out.innerText = JSON.stringify(request, null, 2);
-      if (out.hasAttribute('hidden')) {
-        out.removeAttribute('hidden');
-      }
-      e.currentTarget.classList.remove('drag-over');
-    };
-    window.addEventListener('navigate', function() {
-      document.getElementById('navToast').opened = true;
-    });
-  })(document.getElementById('demo'));
+<body>
+  <div id="demo"></div>
+  <script type="module" src="index.js"></script>
   </script>
 </body>
+
 </html>
