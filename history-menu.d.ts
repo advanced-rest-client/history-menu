@@ -5,22 +5,11 @@
  *   https://github.com/Polymer/tools/tree/master/packages/gen-typescript-declarations
  *
  * To modify these typings, edit the source file(s):
- *   history-menu.html
+ *   history-menu.js
  */
 
 
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
-
-/// <reference path="../polymer/types/polymer-element.d.ts" />
-/// <reference path="../paper-item/paper-icon-item.d.ts" />
-/// <reference path="../paper-item/paper-item-body.d.ts" />
-/// <reference path="../paper-ripple/paper-ripple.d.ts" />
-/// <reference path="../paper-progress/paper-progress.d.ts" />
-/// <reference path="../iron-list/iron-list.d.ts" />
-/// <reference path="../http-method-label/http-method-label.d.ts" />
-/// <reference path="../history-list-mixin/history-list-mixin.d.ts" />
-/// <reference path="../requests-list-mixin/requests-list-mixin.d.ts" />
-/// <reference path="../requests-list-mixin/requests-list-styles.d.ts" />
 
 declare namespace UiElements {
 
@@ -44,30 +33,22 @@ declare namespace UiElements {
    *
    * It can be done using flex layout and making the element to be `flex: 1`.
    *
-   * ## Changes in version 2
+   * ## Required dependencies
    *
-   * - PouchDB is no longer included into the element. Each platform can have
-   * different implementation of the library so this element will not make
-   * assumtions about the platform.
-   * - The element does not support "opened" attribute. Once inserted into the
-   * DOM it queries datastore.
+   * The element works with `@advanced-rest-client/arc-models/request-model.js`
+   * component. It should be included into the DOM.
    *
    * ### Styling
    * `<history-menu>` provides the following custom properties and mixins for styling:
    *
    * Custom property | Description | Default
    * ----------------|-------------|----------
-   * `--history-menu` | Mixin applied to the element | `{}`
    * `--history-menu-background-color` | Background color of the menu | `inherit`
    * `--history-menu-selected-post-method-color` | Font color of selected item POST method label | `#fff`
    * `--history-menu-focused-post-method-color` | Font color of focused item POST method label | `rgb(33, 150, 243)`
-   * `--history-menu-selected-method-label-background-color` | Background color of the POST method label when the item is focused | `#fff`
-   * `--history-menu-list` | Mixin applied to the list element. | `{}`
-   * `--history-menu-list-item` | Mixin applied to each list item | `{}`
+   * `--history-menu-selected-method-label-background-color` | Bg color of the POST method when focused | `#fff`
    * `--history-menu-selected-item-background-color` | Background color of the selected list item | `#FF9800`
    * `--history-menu-selected-item-color` | Color of the selected list item | `#fff`
-   * `--history-menu-url-label` | Mixin applied to the URL label | `{}`
-   * `--history-menu-history-group-header` | Mixin applied to the history list group header | `{}`
    * `--history-menu-history-group-header-font-weigth` | Group header border color | `bold`
    * `--history-menu-history-group-header-border-color` | Group header border color | `#ddd`
    * `--history-menu-history-group-header-color` | Font color of the group header` | `rgba(0, 0, 0, 0.54)`
@@ -75,8 +56,8 @@ declare namespace UiElements {
    * `--arc-menu-empty-info-title-color` | Color applied to the title in the empty info section | ``
    */
   class HistoryMenu extends
-    ArcComponents.RequestsListMixin(
-    ArcComponents.HistoryListMixin(
+    RequestsListMixin(
+    HistoryListMixin(
     Object)) {
 
     /**
@@ -137,6 +118,11 @@ declare namespace UiElements {
   }
 }
 
-interface HTMLElementTagNameMap {
-  "history-menu": UiElements.HistoryMenu;
+declare global {
+
+  interface HTMLElementTagNameMap {
+    "history-menu": UiElements.HistoryMenu;
+  }
 }
+
+export {};
