@@ -4,20 +4,9 @@
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/advanced-rest-client/history-menu)
 
-
 # &lt;history-menu&gt;
 
-A list of history items in the ARC main menu.
-
-## Example:
-
-```html
-<history-menu on-file-accepted="..."></history-menu>
-```
-
-## API components
-
-This components is a part of [API components ecosystem](https://elements.advancedrestclient.com/)
+The history menu for Advanced REST Client is accessible list of history items retrieved from local data store.
 
 ## Usage
 
@@ -26,54 +15,66 @@ This components is a part of [API components ecosystem](https://elements.advance
 npm install --save @advanced-rest-client/history-menu
 ```
 
-### In an html file
-
-```html
-<html>
-  <head>
-    <script type="module">
-      import './node_modules/@advanced-rest-client/history-menu/history-menu.js';
-    </script>
-  </head>
-  <body>
-    <history-menu></history-menu>
-  </body>
-</html>
-```
-
-### In a Polymer 3 element
+### In a LitElement
 
 ```js
-import {PolymerElement, html} from './node_modules/@polymer/polymer/polymer-element.js';
-import './node_modules/@advanced-rest-client/history-menu/history-menu.js';
+import { LitElement, html } from 'lit-element';
+import '@advanced-rest-client/history-menu/history-menu.js';
 
-class SampleElement extends PolymerElement {
-  static get template() {
+class SampleElement extends LitElement {
+  get styles() {
+    return css`
+      history-menu {
+        height: 500px;
+      }
+    `;
+  }
+
+  render() {
     return html`
-    <history-menu></history-menu>
+    <history-menu draggableenabled></history-menu>
     `;
   }
 }
 customElements.define('sample-element', SampleElement);
 ```
 
-### Installation
+### List sizing
 
-```sh
-git clone https://github.com/advanced-rest-client/history-menu
-cd api-url-editor
-npm install
-npm install -g polymer-cli
+It is important to set implicit height of the element. It can be static value like `500px`, relative value like `100%` as long as a parent is sized for height, or a flex value, as long as parent is sized for height.
+The list of requests is set to load only portion of the requests from the data store and load more when list scroll is near end. If there's no scroll then the element will load whole data store at initialization time.
+
+### Drag and drop
+
+API components related to a request object support drag and drop. Set `draggableenabled` property to enable the support.
+
+The `DataTransfer` property of the drag event contains `effectAllowed` set to `copy` as this is only allowed operation on a history object. Only targets that allow the same effect will accept the history item.
+The same propery contains serialized request data under `arc/request-object` media type. It contains request ID under `arc/history-request` and `arc-source/history-menu` media types.
+
+```javascript
+_dropHandler(e) {
+  e.preventDefault();
+  const data = e.dataTransfer.getData('arc/request-object');
+  const request = JSON.parse(data);
+  const id = e.dataTransfer.getData('arc/history-request');
+  console.log(request, id);
+}
 ```
 
-### Running the demo locally
+## Development
 
 ```sh
-polymer serve --npm
-open http://127.0.0.1:<port>/demo/
+git clone https://github.com/advanced-rest-client/history-list-mixin
+cd history-list-mixin
+npm install
 ```
 
 ### Running the tests
+
 ```sh
-polymer test --npm
+npm test
 ```
+
+## API components
+
+This components is a part of [API components ecosystem](https://elements.advancedrestclient.com/)

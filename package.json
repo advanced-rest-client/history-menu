@@ -26,8 +26,9 @@
   "dependencies": {
     "@advanced-rest-client/history-list-mixin": "^3.0.0",
     "@advanced-rest-client/requests-list-mixin": "^3.0.0",
-    "@api-components/http-method-label": "^3.0.0",
     "@anypoint-web-components/anypoint-item": "^1.0.3",
+    "@anypoint-web-components/anypoint-menu-mixin": "^1.0.2",
+    "@api-components/http-method-label": "^3.0.0",
     "@polymer/paper-progress": "^3.0.0",
     "lit-element": "^2.2.1"
   },

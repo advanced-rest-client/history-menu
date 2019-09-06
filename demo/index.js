@@ -5,6 +5,8 @@ import '@anypoint-web-components/anypoint-radio-button/anypoint-radio-button.js'
 import '@anypoint-web-components/anypoint-radio-button/anypoint-radio-group.js';
 import '@anypoint-web-components/anypoint-button/anypoint-button.js';
 import '@advanced-rest-client/arc-demo-helper/arc-interactive-demo.js';
+import '@advanced-rest-client/http-method-selector/http-method-selector-mini.js';
+import '@anypoint-web-components/anypoint-input/anypoint-input.js';
 import '@polymer/paper-toast/paper-toast.js';
 import { DataGenerator } from '@advanced-rest-client/arc-data-generator/arc-data-generator.js';
 import '../history-menu.js';
@@ -152,6 +154,32 @@ class DemoPage extends ArcDemoPage {
     e.currentTarget.classList.remove('drag-over');
   }
 
+  addRequestForm() {
+    const nodes = document.querySelectorAll('.form http-method-selector-mini, .form anypoint-input');
+    const request = {
+      type: 'history',
+      method: nodes[0].method
+    };
+    for (let i = 1; i < nodes.length; i++) {
+      const { name, value } = nodes[i];
+      request[name] = value;
+    }
+    if (!request.created) {
+      request.created = Date.now();
+    } else {
+      const d = new Date(request.created);
+      request.created = d.getTime();
+    }
+    const e = new CustomEvent('request-object-changed', {
+      detail: {
+        request,
+        type: 'history'
+      },
+      bubbles: true
+    });
+    document.body.dispatchEvent(e);
+  }
+
   _demoTemplate() {
     const {
       demoStates,
@@ -235,6 +263,35 @@ class DemoPage extends ArcDemoPage {
           <anypoint-button @click="${this.firstDeleted}">Inform first item deleted</anypoint-button>
           <anypoint-button @click="${this.addNewItem}">Add new history item</anypoint-button>
         </div>
+
+        <section class="form">
+          <h3>Add request</h3>
+          <div>
+            <http-method-selector-mini
+              name="method"
+              method="GET"></http-method-selector-mini>
+            <anypoint-input
+              name="url"
+              value="https://api.domain.com">
+              <label slot="label">URL</label>
+            </anypoint-input>
+          </div>
+          <div>
+            <anypoint-input
+              type="datetime-local"
+              name="created">
+              <label slot="label">Request time</label>
+            </anypoint-input>
+          </div>
+          <div>
+            <anypoint-input
+              name="_id"
+              value="test-id">
+              <label slot="label">History id</label>
+            </anypoint-input>
+          </div>
+          <anypoint-button @click="${this.addRequestForm}">Add</anypoint-button>
+        </section>
       </section>
 
       <paper-toast id="genToast" text="The request data has been generated"></paper-toast>

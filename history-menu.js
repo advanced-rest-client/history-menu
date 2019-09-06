@@ -19,6 +19,15 @@ import '@anypoint-web-components/anypoint-item/anypoint-icon-item.js';
 import '@anypoint-web-components/anypoint-item/anypoint-item-body.js';
 import '@polymer/paper-progress/paper-progress.js';
 import '@api-components/http-method-label/http-method-label.js';
+import { AnypointMenuMixin } from '@anypoint-web-components/anypoint-menu-mixin/anypoint-menu-mixin.js';
+// import labelStyles from '@api-components/http-method-label/http-method-label-common-styles.js';
+
+class HistoryMenuWrapper extends AnypointMenuMixin(LitElement) {
+  render() {
+    return html`<slot></slot>`;
+  }
+}
+window.customElements.define('history-menu-wrapper', HistoryMenuWrapper);
 /**
  * A list of history requests in the ARC main menu.
  *
@@ -133,6 +142,10 @@ class HistoryMenu extends HistoryListMixin(RequestsListMixin(LitElement)) {
 
       [hidden] {
         display: none !important;
+      }
+
+      .selected {
+        color: var(--primary-color);
       }`
     ];
   }
@@ -146,37 +159,43 @@ class HistoryMenu extends HistoryListMixin(RequestsListMixin(LitElement)) {
 
   _listTemplate() {
     const items = this.requests || [];
-    const { selectedItem, draggableEnabled, _hasTwoLines } = this;
-    return items.map((item, index) => html`<div
-      data-index="${index}"
-      title="${item.url}"
-      class="${item._id === selectedItem ? 'selected' : ''}">
+    const { draggableEnabled, _hasTwoLines } = this;
+    return items.map((item, index) => html`
       ${item.hasHeader ? html`<div class="history-group-header">${item.header}</div>` : ''}
       <anypoint-icon-item
         data-index="${index}"
+        data-id="${item._id}"
         @click="${this._openHistory}"
         class="request-list-item"
         draggable="${draggableEnabled ? 'true' : 'false'}"
-        @dragstart="${this._dragStart}">
+        @dragstart="${this._dragStart}"
+        tabindex="-1"
+        title="${item.url}"
+        role="menuitem">
         <http-method-label
-          .method="${item.method}" slot="item-icon"></http-method-label>
+          method="${item.method}"
+          slot="item-icon"></http-method-label>
         <anypoint-item-body ?twoline="${_hasTwoLines}">
           <div class="url">${item.url}</div>
           <div secondary="">${item.timeLabel}</div>
         </anypoint-item-body>
-      </anypoint-icon-item>
-    </div>`);
+      </anypoint-icon-item>`);
   }
 
   render() {
-    const { dataUnavailable, hasRequests, querying } = this;
+    const { dataUnavailable, hasRequests, querying, selectedItem } = this;
     return html`
     ${this.modelTemplate}
     <paper-progress ?hidden="${!querying}" indeterminate></paper-progress>
     ${dataUnavailable ? this._unavailableTemplate() : ''}
-    <div class="list">
+    <history-menu-wrapper
+      class="list"
+      selectable="anypoint-icon-item"
+      attrforselected="data-id"
+      .selected="${selectedItem}"
+      @selected-changed="${this._selectionChanged}">
       ${hasRequests ? this._listTemplate() : ''}
-    </div>`;
+    </history-menu-wrapper>`;
   }
 
   static get properties() {
@@ -273,6 +292,10 @@ class HistoryMenu extends HistoryListMixin(RequestsListMixin(LitElement)) {
     e.dataTransfer.setData('arc/history-request', request._id);
     e.dataTransfer.setData('arc-source/history-menu', request._id);
     e.dataTransfer.effectAllowed = 'copy';
+  }
+
+  _selectionChanged(e) {
+    this.selectedItem = e.detail.value;
   }
 }
 window.customElements.define('history-menu', HistoryMenu);
