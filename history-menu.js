@@ -159,7 +159,7 @@ class HistoryMenu extends HistoryListMixin(RequestsListMixin(LitElement)) {
 
   _listTemplate() {
     const items = this.requests || [];
-    const { draggableEnabled, _hasTwoLines } = this;
+    const { draggableEnabled, _hasTwoLines, compatibility } = this;
     return items.map((item, index) => html`
       ${item.hasHeader ? html`<div class="history-group-header">${item.header}</div>` : ''}
       <anypoint-icon-item
@@ -171,11 +171,14 @@ class HistoryMenu extends HistoryListMixin(RequestsListMixin(LitElement)) {
         @dragstart="${this._dragStart}"
         tabindex="-1"
         title="${item.url}"
-        role="menuitem">
+        role="menuitem"
+        ?compatibility="${compatibility}">
         <http-method-label
           method="${item.method}"
           slot="item-icon"></http-method-label>
-        <anypoint-item-body ?twoline="${_hasTwoLines}">
+        <anypoint-item-body
+          ?twoline="${_hasTwoLines}"
+          ?compatibility="${compatibility}">
           <div class="url">${item.url}</div>
           <div secondary="">${item.timeLabel}</div>
         </anypoint-item-body>
@@ -207,7 +210,11 @@ class HistoryMenu extends HistoryListMixin(RequestsListMixin(LitElement)) {
        * The `dataTransfer` object has `arc/request-object` mime type with
        * serialized JSON with request model.
        */
-      draggableEnabled: { type: Boolean }
+      draggableEnabled: { type: Boolean },
+      /**
+       * Enables compatibility with Anypoint platform
+       */
+      compatibility: { type: Boolean }
     };
   }
 
