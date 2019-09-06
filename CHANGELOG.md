@@ -140,3 +140,12 @@
 
 
 
+## [3.0.1](https://github.com/advanced-rest-client/history-menu/compare/0.1.7...3.0.1) (2019-09-06)
+
+
+### Features
+
+* adding compatibility property ([16051e2](https://github.com/advanced-rest-client/history-menu/commit/16051e2))
+
+
+
